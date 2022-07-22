@@ -17,11 +17,8 @@ jobs:
   deploy:
     # If the test & lint jobs don't pass,
     # the deploy job willn't even execute
-    needs: [test, lint]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Deploying to Heroku
         # More details available at:
         # https://github.com/akhileshns/heroku-deploy
