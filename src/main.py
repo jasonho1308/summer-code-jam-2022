@@ -28,7 +28,7 @@ async def get():
 async def websocket_endpoint(websocket: WebSocket):
     """websockets_endpoint(websockets: WebSocket)
 
-    WebSocket start
+    start WebSocket
     """
     await websocket.accept()
     while True:
