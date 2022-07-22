@@ -18,7 +18,7 @@ html = """
 @app.get("/")
 async def get():
     """get()
-    
+
     Get request event on root of site.
     """
     return HTMLResponse(html)
@@ -27,7 +27,7 @@ async def get():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     """websockets_endpoint(websockets: WebSocket)
-    
+
     WebSocket start
     """
     await websocket.accept()
