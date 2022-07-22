@@ -51,8 +51,10 @@ class ConnectionManager:
     broadcast(message: str)
         Sends message to all active connection
     """
+
     def __init__(self):
         """__init__()
+
         Initalize the manager
         Set `active_connections`
         """
@@ -60,6 +62,7 @@ class ConnectionManager:
 
     async def connect(self, websocket: WebSocket):
         """connect(websocket: WebSocket)
+
         Called when client connects to WebSocket
         Assign connection to `active_connections`
         """
@@ -68,6 +71,7 @@ class ConnectionManager:
 
     def disconnect(self, websocket: WebSocket):
         """disconnect(websocket: WebSocket)
+
         Called when client disconnects
         Remove connection from `active_connections`
         """
@@ -75,12 +79,14 @@ class ConnectionManager:
 
     async def send_to_client(self, message: str, websocket: WebSocket):
         """send_to_client(message: str, websocket: WebSocket)
+
         Sends message to the specified client
         """
         await websocket.send_text(message)
 
     async def broadcast(self, message: str):
         """broadcast(message: str)
+
         Sends message to all active connection
         """
         for connection in self.active_connections:
@@ -93,6 +99,7 @@ manager = ConnectionManager()
 @app.get("/")
 async def get():
     """get()
+
     Called when root of site accessed
     """
     return HTMLResponse(html)
@@ -101,6 +108,7 @@ async def get():
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
     """websocket_endpoint(websocket: WebSocket, client_id: str)
+
     Starts WebSocket when /ws/{some random UUID} accessed
     """
     await manager.connect(websocket)
