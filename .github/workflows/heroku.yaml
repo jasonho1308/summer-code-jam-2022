@@ -4,19 +4,14 @@ name: Deploy # Name of the workflow
 
 # Events that trigger a workflow:
 # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
-on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-    branches:
-      - main
+on: push
 
 jobs:
   # Check out the following article for more inspiration on setting up a
   # standard CI/CD pipeline for most Python projects:
   # https://jarmos.netlify.app/posts/a-standard-ci-cd-pipeline-for-python-projects/
   deploy:
+    if: github.ref == 'refs/heads/main'
     # If the test & lint jobs don't pass,
     # the deploy job willn't even execute
     runs-on: ubuntu-latest
