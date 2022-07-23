@@ -9,12 +9,17 @@ html = """
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Chat</title>
+        <title>Burly Barghests</title>
     </head>
     <body>
         <h2>Your ID: <span id="ws-id"></span></h2>
         <script>
-            var client_id = crypto.randomUUID()
+            function uuidv4() {
+              return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+              );
+            };
+            var client_id = uuidv4()
             document.querySelector("#ws-id").textContent = client_id;
             var ws = new WebSocket(`ws://`+ window.location.host + `/ws/${client_id}`);
             ws.addEventListener('message', function (event) {
