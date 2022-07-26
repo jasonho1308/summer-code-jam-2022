@@ -3,7 +3,6 @@ from fastapi.responses import FileResponse
 
 from ConnectionManager import ConnectionManager
 
-
 app = FastAPI()
 manager = ConnectionManager()
 
@@ -31,4 +30,3 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             await manager.broadcast(f"Client #{client_id} says: {data}")
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-
