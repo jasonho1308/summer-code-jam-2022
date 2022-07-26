@@ -3,6 +3,7 @@ from fastapi.responses import FileResponse
 
 from ConnectionManager import ConnectionManager
 
+
 app = FastAPI()
 manager = ConnectionManager()
 
