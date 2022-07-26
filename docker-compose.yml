@@ -1,0 +1,10 @@
+version: "3.9"
+   
+services:
+  web:
+    build: .
+    command: sh -c "cd app && uvicorn src.main:app --host 0.0.0.0 --reload"
+    volumes:
+      - .:/code/app
+    ports:
+      - "8000:8000"
