@@ -1,7 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
-from src.ConnectionManager import ConnectionManager
+from ConnectionManager import ConnectionManager
 
 app = FastAPI()
 manager = ConnectionManager()
