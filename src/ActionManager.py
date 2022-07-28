@@ -20,7 +20,6 @@ class ActionManager:
             "password": "xxx"
         }
         """
-
         db = database.SessionLocal()
         hashed = db.execute(
             select(models.Player.hashed_password).where(models.Player.name == data["name"])
