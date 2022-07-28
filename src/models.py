@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, JSON, String, TIMESTAMP
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from .database import Base, engine
 
 
 class Player(Base):
@@ -30,3 +30,5 @@ class Item(Base):
     owner_name = Column(Integer, ForeignKey("players.name"))
 
     owner = relationship("User", back_populates="items")
+
+Base.metadata.create_all(engine)
