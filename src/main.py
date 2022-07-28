@@ -30,12 +30,20 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     try:
         while True:
             data = await websocket.receive_json()
-            getattr(action_manager, data["action"])(data, client_id, connection_manager, websocket)
+            try:
+                getattr(action_manager, data["action"])(
+                    data, client_id, connection_manager, websocket
+                )
+            except AttributeError:
+                await connection_manager.send_to_client(
+                    "Invalid action specified", websocket
+                )
     except WebSocketDisconnect:
         if client_id in action_manager.certificated:
             action_manager.certificated.remove(client_id)
         connection_manager.disconnect(websocket)
     except JSONDecodeError:
         await connection_manager.send_to_client(
-            "Wrong data sent. Please send a JSON string instead (Hint: JSON.stringify).", websocket
+            "Wrong data sent. Please send a JSON string instead (Hint: JSON.stringify).",
+            websocket,
         )
