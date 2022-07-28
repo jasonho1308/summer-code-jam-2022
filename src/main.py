@@ -36,6 +36,6 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             action_manager.certificated.remove(client_id)
         connection_manager.disconnect(websocket)
     except JSONDecodeError:
-        connection_manager.send_to_client(
-            "Wrong data sent. Please send a JSON string instead (Hint: JSON.stringify)."
+        await connection_manager.send_to_client(
+            "Wrong data sent. Please send a JSON string instead (Hint: JSON.stringify).", websocket
         )
