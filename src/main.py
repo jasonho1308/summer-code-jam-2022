@@ -26,7 +26,7 @@ async def healthcheck():
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
     """Starts WebSocket when /ws/{some random UUID} accessed"""
-    await manager.connect(websocket)
+    await connection_manager.connect(websocket)
     try:
         while True:
             data = await websocket.receive_json()
