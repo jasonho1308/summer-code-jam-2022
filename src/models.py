@@ -11,15 +11,17 @@ class Player(Base):
 
     __tablename__ = "players"
 
-    name = Column(String(32), primary_key=True, index=True)
+    UUID = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(32), index=True)
     hashed_password = Column(String(72))
     role = Column(String, index=True)
-    hp = Column(Integer, index=True)
-    max_hp = Column(Integer, index=True)
-    energy = Column(Integer, index=True)
-    max_energy = Column(Integer, index=True)
-    pve_cooldown = Column(TIMESTAMP, index=True)
-    pvp_cooldown = Column(TIMESTAMP, index=True)
+    hp = Column(Integer)
+    max_hp = Column(Integer)
+    energy = Column(Integer)
+    max_energy = Column(Integer)
+    gold = Column(Integer)
+    pve_cooldown = Column(TIMESTAMP)
+    pvp_cooldown = Column(TIMESTAMP)
 
     items = relationship("Item", back_populates="owner")
 
@@ -29,12 +31,13 @@ class Item(Base):
 
     __tablename__ = "items"
 
-    item_type = Column(String, index=True)
+    item_id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String, index=True)
-    equipped = Column(Boolean, index=True)
-    amount = Column(Integer, index=True)
-    item_info = Column(JSON, index=True)
-    owner_name = Column(Integer, ForeignKey("players.name"), primary_key=True, index=True)
+    item_type = Column(String)
+    equipped = Column(Boolean)
+    amount = Column(Integer)
+    item_info = Column(JSON)
+    owner = Column(Integer, ForeignKey("players.UUID"), index=True)
 
     owner = relationship("User", back_populates="items")
 
