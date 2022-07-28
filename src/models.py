@@ -8,6 +8,7 @@ from .database import Base, engine
 
 class Player(Base):
     """Player in ORM"""
+
     __tablename__ = "players"
 
     name = Column(String(32), primary_key=True, index=True)
@@ -25,8 +26,10 @@ class Player(Base):
 
 class Item(Base):
     """Item in ORM"""
+
     __tablename__ = "items"
 
+    item_type = Column(String, index=True)
     title = Column(String, index=True)
     equipped = Column(Boolean, index=True)
     amount = Column(Integer, index=True)
@@ -34,5 +37,6 @@ class Item(Base):
     owner_name = Column(Integer, ForeignKey("players.name"))
 
     owner = relationship("User", back_populates="items")
+
 
 Base.metadata.create_all(engine)
