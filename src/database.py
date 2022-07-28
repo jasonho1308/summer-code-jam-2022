@@ -4,8 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = os.environ["DATABASE_URL"].replace("postgres://", "postgresql://")
-# SQLAlchemy deprecated `postgres://` had to use the latter one now
+SQLALCHEMY_DATABASE_URL = os.environ["DB_URL"]
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
