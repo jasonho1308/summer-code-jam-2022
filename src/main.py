@@ -29,7 +29,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     try:
         while True:
             data = await websocket.receive_json()
-            getattr(ActionManager, data["action"])(data, connection_manager)
+            getattr(ActionManager, data["action"])(data, client_id)
     except WebSocketDisconnect:
         connection_manager.disconnect(websocket)
     except JSONDecodeError:
