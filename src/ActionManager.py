@@ -9,7 +9,7 @@ class ActionManager:
 
     certificated = []
 
-    def login(self, data, client_id):
+    def login(self, data, client_id, connection_manager, websocket):
         """
         Handles login request
 
