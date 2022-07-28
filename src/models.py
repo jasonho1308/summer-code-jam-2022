@@ -1,6 +1,4 @@
-from sqlalchemy import (
-    JSON, TIMESTAMP, Boolean, Column, ForeignKey, Integer, String
-)
+from sqlalchemy import JSON, TIMESTAMP, Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from .database import Base, engine

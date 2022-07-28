@@ -22,11 +22,15 @@ class ActionManager:
         """
         db = database.SessionLocal()
         hashed = db.execute(
-            select(models.Player.hashed_password).where(models.Player.name == data["name"])
+            select(models.Player.hashed_password).where(
+                models.Player.name == data["name"]
+            )
         )
         db.close()  # close the conn asap
         if bcrypt.checkpw(data["password"], hashed):
             self.certificated.append(client_id)
             connection_manager.send_to_client("Welcome!")
         else:
-            connection_manager.send_to_client("Login failed, incorrect username or password")
+            connection_manager.send_to_client(
+                "Login failed, incorrect username or password"
+            )
