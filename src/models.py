@@ -3,8 +3,8 @@ from sqlalchemy.orm import relationship
 
 from .database import Base, engine
 
-
 class Player(Base):
+    """Player in ORM"""
     __tablename__ = "players"
 
     name = Column(String(32), primary_key=True, index=True)
@@ -16,11 +16,12 @@ class Player(Base):
     max_energy = Column(Integer, index=True)
     pve_cooldown = Column(TIMESTAMP, index=True)
     pvp_cooldown = Column(TIMESTAMP, index=True)
-    
+
     items = relationship("Item", back_populates="owner")
 
 
 class Item(Base):
+    """Item in ORM"""
     __tablename__ = "items"
 
     title = Column(String, index=True)
