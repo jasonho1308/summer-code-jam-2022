@@ -34,7 +34,7 @@ class Item(Base):
     equipped = Column(Boolean, index=True)
     amount = Column(Integer, index=True)
     item_info = Column(JSON, index=True)
-    owner_name = Column(Integer, ForeignKey("players.name"))
+    owner_name = Column(Integer, ForeignKey("players.name"), primary_key=True, index=True)
 
     owner = relationship("User", back_populates="items")
 
