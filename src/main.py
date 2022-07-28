@@ -1,10 +1,14 @@
+from json import JSONDecodeError
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
+from .ActionManager import ActionManager
 from .ConnectionManager import ConnectionManager
 
 app = FastAPI()
-manager = ConnectionManager()
+connection_manager = ConnectionManager()
+action_manager = ActionManager()
 
 
 @app.get("/")
@@ -22,11 +26,16 @@ async def healthcheck():
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
     """Starts WebSocket when /ws/{some random UUID} accessed"""
-    await manager.connect(websocket)
+    await connection_manager.connect(websocket)
     try:
         while True:
-            data = await websocket.receive_text()
-            await manager.send_to_client(f"You wrote: {data}", websocket)
-            await manager.broadcast(f"Client #{client_id} says: {data}")
+            data = await websocket.receive_json()
+            getattr(action_manager, data["action"])(data, client_id)
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
+        if client_id in action_manager.certificated:
+            action_manager.certificated.remove(client_id)
+        connection_manager.disconnect(websocket)
+    except JSONDecodeError:
+        connection_manager.send_to_client(
+            "Wrong data sent. Please send a JSON string instead (Hint: JSON.stringify)."
+        )
