@@ -30,7 +30,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     try:
         while True:
             data = await websocket.receive_json()
-            getattr(action_manager, data["action"])(data, client_id)
+            getattr(action_manager, data["action"])(data, client_id, connection_manager, websocket)
     except WebSocketDisconnect:
         if client_id in action_manager.certificated:
             action_manager.certificated.remove(client_id)
