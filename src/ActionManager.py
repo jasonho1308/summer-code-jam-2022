@@ -83,3 +83,16 @@ class ActionManager:
         await connection_manager.send_to_client(
             f"New account created, welcome, {data['name']}!", websocket
         )
+
+    async def query_online_users(self, data, client_id, connection_manager, websocket):
+        """
+        Returns online users
+
+        JSON Structure:
+        {
+            "action": "query_online_users"
+        }
+        """
+        await connection_manager.send_to_client(
+            ", ".join(self.certificated.values()), websocket
+        )
