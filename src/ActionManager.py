@@ -46,7 +46,7 @@ class ActionManager:
 
         JSON Structure:
         {
-            "action": "create_account"
+            "action": "new_account"
             "name": "xxx"
             "password": "xxx"
         }
@@ -62,7 +62,7 @@ class ActionManager:
                 name=data["name"],
                 hashed_password=bcrypt.hashpw(
                     data["password"].encode("utf-8"), bcrypt.gensalt()
-                ),
+                ).decode("utf-8"),
             )
         )
         db.close()  # close the conn asap
