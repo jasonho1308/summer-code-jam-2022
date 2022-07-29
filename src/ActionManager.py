@@ -13,7 +13,6 @@ class ActionManager:
     async def login(self, data, client_id, connection_manager, websocket):
         """
         Handles login request
-
         JSON Structure:
         {
             "action": "login"
@@ -25,9 +24,7 @@ class ActionManager:
         hashed = db.execute(
             select(
                 models.Player.hashed_password,
-            ).where(
-                models.Player.name == data["name"]
-            )
+            ).where(models.Player.name == data["name"])
         )
         db.close()  # close the conn asap
         result = None
@@ -51,7 +48,6 @@ class ActionManager:
     async def new_account(self, data, client_id, connection_manager, websocket):
         """
         Account creation request
-
         JSON Structure:
         {
             "action": "new_account"
@@ -77,7 +73,9 @@ class ActionManager:
             db.commit()
             db.close()  # close the conn asap
         except IntegrityError:
-            await connection_manager.send_to_client(f"Username \"{data['name']}\" taken", websocket)
+            await connection_manager.send_to_client(
+                f"Username \"{data['name']}\" taken", websocket
+            )
             return
         self.certificated |= {client_id: data["name"]}
         await connection_manager.send_to_client(
