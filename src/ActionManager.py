@@ -13,6 +13,7 @@ class ActionManager:
     async def login(self, data, client_id, connection_manager, websocket):
         """
         Handles login request
+
         JSON Structure:
         {
             "action": "login"
@@ -48,6 +49,7 @@ class ActionManager:
     async def new_account(self, data, client_id, connection_manager, websocket):
         """
         Account creation request
+
         JSON Structure:
         {
             "action": "new_account"
