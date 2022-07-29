@@ -96,3 +96,226 @@ class ActionManager:
         await connection_manager.send_to_client(
             ", ".join(self.certificated.values()), websocket
         )
+
+    async def go_hunting(self, data, client_id, connection_manager, websocket):
+        """
+        Go out into the wild and seek out monsters to fight
+
+        JSON Structure:
+        {
+            "action": "go_hunting"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def challenge_player(self, data, client_id, connection_manager, websocket):
+        """
+        Challenge another player to a fight
+
+        JSON Structure:
+        {
+            "action": "challenge_player"
+            "player": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def accept_challenge(self, data, client_id, connection_manager, websocket):
+        """
+        Accept an incoming challenge
+
+        JSON Structure:
+        {
+            "action": "accept_challenge"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def attack(self, data, client_id, connection_manager, websocket):
+        """
+        Choose an attack to use in the current fight
+
+        JSON Structure:
+        {
+            "action": "attack"
+            "attack": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def view_shop(self, data, client_id, connection_manager, websocket):
+        """
+        Look at available shop items
+
+        JSON Structure:
+        {
+            "action": "view_shop"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def buy(self, data, client_id, connection_manager, websocket):
+        """
+        Buy an item from the shop
+
+        JSON Structure:
+        {
+            "action": "buy"
+            "item": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def sell(self, data, client_id, connection_manager, websocket):
+        """
+        Sell an item for gold
+
+        JSON Structure:
+        {
+            "action": "sell"
+            "item": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def seek_quest(self, data, client_id, connection_manager, websocket):
+        """
+        Look up available quests
+
+        JSON Structure:
+        {
+            "action": "seek_quest"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def accept_quest(self, data, client_id, connection_manager, websocket):
+        """
+        Take on a quest
+
+        JSON Structure:
+        {
+            "action": "accept_quest"
+            "quest": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def fulfil_quest(self, data, client_id, connection_manager, websocket):
+        """
+        Report back on a completed quest to collect your reward
+
+        JSON Structure:
+        {
+            "action": "fulfil_quest"
+            "quest": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def inventory(self, data, client_id, connection_manager, websocket):
+        """
+        Look at the contents of your bag
+
+        JSON Structure:
+        {
+            "action": "inventory"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def equip(self, data, client_id, connection_manager, websocket):
+        """
+        Equip an item
+
+        JSON Structure:
+        {
+            "action": "equip"
+            "item": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def use_item(self, data, client_id, connection_manager, websocket):
+        """
+        Use a consumable item
+
+        JSON Structure:
+        {
+            "action": "use_item"
+            "item": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def status(self, data, client_id, connection_manager, websocket):
+        """
+        Check your health, mana, progress on current quests and other details
+
+        JSON Structure:
+        {
+            "action": "status"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def send_trade_offer(self, data, client_id, connection_manager, websocket):
+        """
+        Offer to initiate a trade with another user
+
+        JSON Structure:
+        {
+            "action": "send_trade_offer"
+            "user": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def put_trade(self, data, client_id, connection_manager, websocket):
+        """
+        Set the items and gold offered in current trade
+
+        JSON Structure:
+        {
+            "action": "put_trade"
+            "items": [id1, id2]
+            "gold": 123
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def accept_trade(self, data, client_id, connection_manager, websocket):
+        """
+        Accept the terms of trade. Items will be exchanged when both players accept
+
+        JSON Structure:
+        {
+            "action": "accept_trade"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def chat(self, data, client_id, connection_manager, websocket):
+        """
+        Send a chat message to all users
+
+        JSON Structure:
+        {
+            "action": "chat"
+            "message": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
+
+    async def direct_message(self, data, client_id, connection_manager, websocket):
+        """
+        Send a message to another user
+
+        JSON Structure:
+        {
+            "action": "direct_message"
+            "message": "xxx"
+            "user": "xxx"
+        }
+        """
+        await connection_manager.send_to_client("Not yet implemented", websocket)
