@@ -1,5 +1,6 @@
 import bcrypt
 from sqlalchemy import insert, select
+from sqlalchemy.exc import IntegrityError
 
 from . import database, models
 
@@ -62,16 +63,19 @@ class ActionManager:
             )
             return
         db = database.SessionLocal()
-        db.execute(
-            insert(models.Player).values(
-                name=data["name"],
-                hashed_password=bcrypt.hashpw(
-                    data["password"].encode("utf-8"), bcrypt.gensalt()
-                ).decode("utf-8"),
+        try:
+            db.execute(
+                insert(models.Player).values(
+                    name=data["name"],
+                    hashed_password=bcrypt.hashpw(
+                        data["password"].encode("utf-8"), bcrypt.gensalt()
+                    ).decode("utf-8"),
+                )
             )
-        )
-        db.commit()
-        db.close()  # close the conn asap
+            db.commit()
+            db.close()  # close the conn asap
+        except IntegrityError:
+            await connection_manager.send_to_client("Username taken", websocket)
         self.certificated.append(client_id)
         await connection_manager.send_to_client(
             f"New account created, welcome, {data['name']}!", websocket
