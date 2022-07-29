@@ -65,6 +65,7 @@ class ActionManager:
                 ).decode("utf-8"),
             )
         )
+        db.commit()
         db.close()  # close the conn asap
         self.certificated.append(client_id)
         await connection_manager.send_to_client(
