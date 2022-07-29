@@ -8,7 +8,7 @@ from . import database, models
 class ActionManager:
     """Handling actions from client"""
 
-    certificated = []
+    certificated = {}
 
     async def login(self, data, client_id, connection_manager, websocket):
         """
@@ -23,9 +23,9 @@ class ActionManager:
         """
         db = database.SessionLocal()
         hashed = db.execute(
-            select(models.Player.hashed_password).where(
-                models.Player.name == data["name"]
-            )
+            select(
+                models.Player.hashed_password,
+            ).where(models.Player.name == data["name"])
         )
         db.close()  # close the conn asap
         result = None
@@ -37,7 +37,7 @@ class ActionManager:
                 websocket,
             )
         if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
-            self.certificated.append(client_id)
+            self.certificated |= {client_id: data["name"]}
             await connection_manager.send_to_client(
                 f"Welcome, {data['name']}!", websocket
             )
@@ -57,7 +57,7 @@ class ActionManager:
             "password": "xxx"
         }
         """
-        if client_id in self.certificated:
+        if client_id in self.certificated.keys():
             await connection_manager.send_to_client(
                 "You are already logged in", websocket
             )
@@ -75,8 +75,11 @@ class ActionManager:
             db.commit()
             db.close()  # close the conn asap
         except IntegrityError:
-            await connection_manager.send_to_client("Username taken", websocket)
-        self.certificated.append(client_id)
+            await connection_manager.send_to_client(
+                f"Username \"{data['name']}\" taken", websocket
+            )
+            return
+        self.certificated |= {client_id: data["name"]}
         await connection_manager.send_to_client(
             f"New account created, welcome, {data['name']}!", websocket
         )
