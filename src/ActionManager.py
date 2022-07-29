@@ -27,7 +27,7 @@ class ActionManager:
             )
         )
         db.close()  # close the conn asap
-        if bcrypt.checkpw(data["password"], hashed):
+        if bcrypt.checkpw(data["password"].encode("utf-8"), hashed):
             self.certificated.append(client_id)
             connection_manager.send_to_client("Welcome!")
         else:
