@@ -39,8 +39,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                     "Invalid action specified", websocket
                 )
     except WebSocketDisconnect:
-        if client_id in action_manager.certificated:
-            action_manager.certificated.remove(client_id)
+        if client_id in action_manager.certificated.keys():
+            del action_manager.certificated[client_id]
         connection_manager.disconnect(websocket)
     except JSONDecodeError:
         await connection_manager.send_to_client(
