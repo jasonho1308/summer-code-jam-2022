@@ -27,14 +27,19 @@ class ActionManager:
             )
         )
         db.close()  # close the conn asap
-        if not isinstance(hashed, bytes):
+        result = None
+        for row in hashed:
+            result = row.hashed_password
+        if result is None:
             await connection_manager.send_to_client(
-                "No account with that username found", websocket
+                f"No account with that username found {row._asdict()}",
+                websocket,
             )
-            return
-        if bcrypt.checkpw(data["password"].encode("utf-8"), hashed):
+        if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
             self.certificated.append(client_id)
-            await connection_manager.send_to_client("Welcome!", websocket)
+            await connection_manager.send_to_client(
+                f"Welcome, {data['name']}!", websocket
+            )
         else:
             await connection_manager.send_to_client(
                 "Login failed, incorrect username or password", websocket
