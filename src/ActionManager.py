@@ -1,5 +1,5 @@
 import bcrypt
-from sqlalchemy import select
+from sqlalchemy import insert, select
 
 from . import database, models
 
@@ -9,7 +9,7 @@ class ActionManager:
 
     certificated = []
 
-    def login(self, data, client_id, connection_manager, websocket):
+    async def login(self, data, client_id, connection_manager, websocket):
         """
         Handles login request
 
@@ -29,8 +29,39 @@ class ActionManager:
         db.close()  # close the conn asap
         if bcrypt.checkpw(data["password"].encode("utf-8"), hashed):
             self.certificated.append(client_id)
-            connection_manager.send_to_client("Welcome!")
+            await connection_manager.send_to_client("Welcome!", websocket)
         else:
-            connection_manager.send_to_client(
-                "Login failed, incorrect username or password"
+            await connection_manager.send_to_client(
+                "Login failed, incorrect username or password", websocket
             )
+
+    async def new_account(self, data, client_id, connection_manager, websocket):
+        """
+        Account creation request
+
+        JSON Structure:
+        {
+            "action": "create_account"
+            "name": "xxx"
+            "password": "xxx"
+        }
+        """
+        if client_id in self.certificated:
+            await connection_manager.send_to_client(
+                "You are already logged in", websocket
+            )
+            return
+        db = database.SessionLocal()
+        db.execute(
+            insert(models.Player).values(
+                name=data["name"],
+                hashed_password=bcrypt.hashpw(
+                    data["password"].encode("utf-8"), bcrypt.gensalt()
+                ),
+            )
+        )
+        db.close()  # close the conn asap
+        self.certificated.append(client_id)
+        await connection_manager.send_to_client(
+            f"New account created, welcome, {data['name']}!", websocket
+        )

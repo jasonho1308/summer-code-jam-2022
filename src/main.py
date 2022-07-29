@@ -31,7 +31,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
         while True:
             data = await websocket.receive_json()
             try:
-                getattr(action_manager, data["action"])(
+                await getattr(action_manager, data["action"])(
                     data, client_id, connection_manager, websocket
                 )
             except AttributeError:
