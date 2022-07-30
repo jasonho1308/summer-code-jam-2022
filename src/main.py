@@ -7,8 +7,8 @@ from .ActionManager import ActionManager
 from .ConnectionManager import ConnectionManager
 
 app = FastAPI()
-connection_manager = ConnectionManager()
 action_manager = ActionManager()
+connection_manager = ConnectionManager(action_manager)
 
 
 @app.get("/")
