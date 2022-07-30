@@ -95,7 +95,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client(
             ", ".join(
-                vals[0] for vals in self.certificated.values())
+                vals[0] for vals in self.certificated.values()
             ), websocket
         )
 
