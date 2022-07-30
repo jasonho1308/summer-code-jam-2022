@@ -65,7 +65,7 @@ class ActionManager:
             result = row.hashed_password
         if result is None:
             await connection_manager.send_to_client(
-                f"No account with that username found {row._asdict()}",
+                f"No account with username {data['name']} found",
                 websocket,
             )
         if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
