@@ -1,11 +1,13 @@
 class Skill:
     """Template class for skills"""
+
     skill_id = None
     name = None
     description = None
     effects = None
-    
-    #Requirements for players if we get around to players learning skills
+    energy_cost = None    
+
+    # Requirements for players if we get around to players learning skills
     level = None
     strength = None
     intelligence = None
