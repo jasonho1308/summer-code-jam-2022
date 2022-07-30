@@ -40,7 +40,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 )
     except WebSocketDisconnect:
         if client_id in action_manager.certificated.keys():
-            del action_manager.certificated[client_id]
+            action_manager.certed.delete(client_id)
         connection_manager.disconnect(websocket)
     except JSONDecodeError:
         await connection_manager.send_to_client(
