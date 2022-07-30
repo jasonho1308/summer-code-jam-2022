@@ -42,9 +42,6 @@ class Fight:
     def gold_amount_got(self, winner: Player) -> int:
         """Calculate the gold obtained when one wins"""
         if winner.is_offender:
-            return 100 * amount_of_skills_used
+            return 100 * self.amount_of_skills_used
         else:
-            return 150 * amount_of_skills_used
-
-            
-    
+            return 150 * self.amount_of_skills_used
