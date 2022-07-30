@@ -9,6 +9,9 @@ class ConnectionManager:
 
     Attributes
     ----------
+    action_manager: ActionManager
+        Just to get certificated users because why not
+
     active_connections: List[WebSocket]
         Current alive connections that is connected to WebSocket
 
@@ -29,12 +32,13 @@ class ConnectionManager:
         Sends message to all active connection
     """
 
-    def __init__(self):
+    def __init__(self, action_manager):
         """
         Initalize the manager
 
         Set `active_connections`
         """
+        self.action_manager = action_manager
         self.active_connections: List[WebSocket] = []
 
     async def connect(self, websocket: WebSocket):
@@ -60,6 +64,6 @@ class ConnectionManager:
         await websocket.send_text(message)
 
     async def broadcast(self, message: str):
-        """Sends message to all active connection"""
-        for connection in self.active_connections:
+        """Sends message to all logined connection"""
+        for connection in self.action_manager.certed.name_ws.keys():
             await connection.send_text(message)
