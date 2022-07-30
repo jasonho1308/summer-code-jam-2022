@@ -12,7 +12,7 @@
           var client_id = uuidv4()
           var ws = new WebSocket(`ws://`+ window.location.host + `/ws/${client_id}`);
           ws.addEventListener('message', function (event) {
-              console.log('From server:', event.data);
+              console.log(event.data);
           });
       </script>
 </html>
