@@ -34,4 +34,4 @@ class Skill:
                 f"{user.name} don't have enough energy to cast {self.name}!",
             )
         user.energy -= self.energy_cost
-        return _use(user, opponent)
+        return self._use(user, opponent)
