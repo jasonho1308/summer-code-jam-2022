@@ -340,5 +340,5 @@ class ActionManager:
         """
         await connection_manager.send_to_client(
             f"[DM] {self.certed.id_name[client_id]}: {data['message']}",
-            self.certed.name_ws[data["user"]]
+            self.certed.name_ws[data["user"]],
         )
