@@ -4,15 +4,18 @@ from sqlalchemy.exc import IntegrityError
 
 from . import database, models
 
+
 def login_required(func):
     """When decorator used login will be required on the action specified"""
+
     async def wrapper(self, data, client_id, connection_manager, websocket):
         if client_id in self.id_name:
-            return func(*args, **kw)
+            return func(self, data, client_id, connection_manager, websocket)
         else:
             await connection_manager.send_to_client(
                 "Login to use the action", websocket
             )
+
     return wrapper
 
 

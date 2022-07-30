@@ -1,5 +1,6 @@
 class Item:
     """Template class for items"""
+
     item_type_id = None
     name = None
     slot = None

@@ -39,9 +39,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                     "Invalid action specified", websocket
                 )
             except Exception as e:
-                await connection_manager.send_to_client(
-                    str(e), websocket
-                )
+                await connection_manager.send_to_client(str(e), websocket)
     except WebSocketDisconnect:
         if client_id in action_manager.certed.id_name.keys():
             action_manager.certed.delete(client_id)

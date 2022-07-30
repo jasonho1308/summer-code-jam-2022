@@ -1,7 +1,9 @@
 from random import choice
 
+
 class Monster:
     """Template class for monsters"""
+
     monster_id = None
     name = None
     level = None
@@ -16,6 +18,6 @@ class Monster:
     charisma = None
     skills = []
 
-    def attack(player):
+    def attack(self, player):
         """Select random monster skill"""
         choice(self.skills)(self, player)

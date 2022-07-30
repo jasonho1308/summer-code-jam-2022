@@ -5,7 +5,7 @@ class Skill:
     name = None
     description = None
     effects = None
-    energy_cost = None    
+    energy_cost = None
 
     # Requirements for players if we get around to players learning skills
     level = None
