@@ -24,10 +24,12 @@ class Fight:
     """Handles Fight actions"""
 
     def __init__(self, offender: Player, defender: Player) -> None:
+        """Initalizes the fight"""
         self.offender = offender
         self.defender = defender
 
     def use_skill(self, caster: Player, castee: Player, skill: Skill) -> str:
+        """Called when one uses skill"""
         cast = skill.use(caster, castee)
         if caster.is_offender:
             self.offender = cast[0]  # caster
@@ -38,6 +40,7 @@ class Fight:
         return cast[3]  # whether the skill was effective or not
 
     def gold_amount_got(self, winner: Player) -> int:
+        """Calculate the gold obtained when one wins"""
         if winner.is_offender:
             return 100 * amount_of_skills_used
         else:
