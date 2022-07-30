@@ -6,7 +6,7 @@ from . import database, models
 
 def login_required(func):
     """When decorator used login will be required on the action specified"""
-    def wrapper(self, data, client_id, connection_manager, websocket):
+    async def wrapper(self, data, client_id, connection_manager, websocket):
         if client_id in self.id_name:
             return func(*args, **kw)
         else:
