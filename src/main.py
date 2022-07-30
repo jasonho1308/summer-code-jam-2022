@@ -34,7 +34,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 await getattr(action_manager, data["action"])(
                     data, client_id, connection_manager, websocket
                 )
-            except AttributeError:
+            except AttributeError, KeyError:
                 await connection_manager.send_to_client(
                     "Invalid action specified", websocket
                 )
