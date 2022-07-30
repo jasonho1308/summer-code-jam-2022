@@ -305,7 +305,7 @@ class ActionManager:
             "message": "xxx"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        await connection_manager.broadcast(f"[Chat] {self.certificated[client_id]}: {data['message']}", websocket)
 
     async def direct_message(self, data, client_id, connection_manager, websocket):
         """
