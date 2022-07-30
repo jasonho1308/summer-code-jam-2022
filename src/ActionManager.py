@@ -327,7 +327,7 @@ class ActionManager:
         }
         """
         await connection_manager.broadcast(
-            f"[Chat] {self.certed.id_name[client_id]}: {data['message']}", websocket
+            f"[Chat] {self.certed.id_name[client_id]}: {data['message']}"
         )
 
     async def direct_message(self, data, client_id, connection_manager, websocket):
