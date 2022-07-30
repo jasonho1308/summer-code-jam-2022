@@ -1,22 +1,23 @@
 from random import choice
 
+from .skill import Skill
+
 
 class Monster:
     """Template class for monsters"""
 
-    monster_id = None
-    name = None
-    level = None
-    hp = None
-    max_hp = None
-    energy = None
-    max_energy = None
-    strength = None
-    intelligence = None
-    stamina = None
-    dexterity = None
-    charisma = None
-    skills = []
+    name: str
+    level: int
+    hp: int
+    max_hp: int
+    energy: int
+    max_energy: int
+    strength: int
+    intelligence: int
+    stamina: int
+    dexterity: int
+    charisma: int
+    skills: list[Skill]
 
     def attack(self, player):
         """Select random monster skill"""
