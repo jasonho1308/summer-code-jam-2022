@@ -1,19 +1,17 @@
 class Skill:
     """Template class for skills"""
 
-    skill_id = None
-    name = None
-    description = None
-    effects = None
-    energy_cost = None
+    name: str
+    description: str
+    energy_cost: int
 
     # Requirements for players if we get around to players learning skills
-    level = None
-    strength = None
-    intelligence = None
-    stamina = None
-    dexterity = None
-    charisma = None
+    level: int
+    strength: int
+    intelligence: int
+    stamina: int
+    dexterity: int
+    charisma: int
 
     def _use(self, user, opponent):
         """Implement effects on the user and opponent here"""
@@ -31,7 +29,7 @@ class Skill:
             return (
                 user,
                 opponent,
-                f"{user.name} don't have enough energy to cast {self.name}!",
+                f"{user.name} doesn't have enough energy to cast {self.name}!",
             )
         user.energy -= self.energy_cost
         return self._use(user, opponent)

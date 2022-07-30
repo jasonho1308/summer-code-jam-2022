@@ -3,6 +3,7 @@ from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 
 from . import database, models
+from .fight import PVEFight
 
 
 def login_required(func):
@@ -35,6 +36,31 @@ class Certificated:
         if client_id in self.id_name:
             name = self.id_name.pop(client_id)
             self.name_ws.pop(name)
+
+
+class Sessions:
+    """Track temporary sessions for users"""
+
+    fights = {}
+
+    def add_pve_fight(self, player):
+        """Begin tracking a PVE fight"""
+        if self.is_fighting(player.name):
+            return
+        self.fights[player.name] = PVEFight(player)
+
+    def is_fighting(self, name):
+        """Check if a user is in a fight"""
+        return name in self.fights
+
+    def attack(self, player_name, skill, websocket):
+        """Run a turn of combat"""
+        result = self.fights[player_name].use_skill(skill)
+
+        if result[1] != 0:
+            # TODO: Propagate updated player data back to database
+            self.fights[player_name].pop()
+        return result[0]
 
 
 class ActionManager:
