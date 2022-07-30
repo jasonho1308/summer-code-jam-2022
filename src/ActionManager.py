@@ -37,7 +37,7 @@ class ActionManager:
                 websocket,
             )
         if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
-            self.certificated |= {client_id: data["name"]}
+            self.certificated |= {client_id: (data["name"], websocket)}
             await connection_manager.send_to_client(
                 f"Welcome, {data['name']}!", websocket
             )
@@ -79,7 +79,7 @@ class ActionManager:
                 f"Username \"{data['name']}\" taken", websocket
             )
             return
-        self.certificated |= {client_id: data["name"]}
+        self.certificated |= {client_id: (data["name"], websocket)}
         await connection_manager.send_to_client(
             f"New account created, welcome, {data['name']}!", websocket
         )
@@ -94,7 +94,9 @@ class ActionManager:
         }
         """
         await connection_manager.send_to_client(
-            ", ".join(self.certificated.values()), websocket
+            ", ".join(
+                vals[0] for vals in self.certificated.values())
+            ), websocket
         )
 
     async def go_hunting(self, data, client_id, connection_manager, websocket):
@@ -305,7 +307,9 @@ class ActionManager:
             "message": "xxx"
         }
         """
-        await connection_manager.broadcast(f"[Chat] {self.certificated[client_id]}: {data['message']}", websocket)
+        await connection_manager.broadcast(
+            f"[Chat] {self.certificated[client_id][0]}: {data['message']}", websocket
+        )
 
     async def direct_message(self, data, client_id, connection_manager, websocket):
         """
