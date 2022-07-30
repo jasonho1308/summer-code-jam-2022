@@ -136,7 +136,10 @@ class ActionManager:
             "player": "xxx"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        await connection_manager.send_to_client(
+            f"Challenge from {self.certed.id_name[client_id]}. Accept? (Response with `accept_challenge`)",
+            self.certed.name_ws[data["player"]],
+        )
 
     async def accept_challenge(self, data, client_id, connection_manager, websocket):
         """
