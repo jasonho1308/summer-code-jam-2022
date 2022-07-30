@@ -5,15 +5,32 @@ from sqlalchemy.exc import IntegrityError
 from . import database, models
 
 
+class Certificated:
+    """Certificating login/new_account creates certificate"""
+
+    id_name = {}
+    name_ws = {}
+
+    def add(self, client_id, name, websocket):
+        """Add user"""
+        self.id_name |= {client_id: name}
+        self.name_ws |= {name: websocket}
+
+    def delete(self, client_id):
+        """Delete user"""
+        if client_id in self.id_name:
+            name = self.id_name.pop(client_id)
+            self.name_ws.pop(name)
+
+
 class ActionManager:
     """Handling actions from client"""
 
-    certificated = {}
+    certed = Certificated()
 
     async def login(self, data, client_id, connection_manager, websocket):
         """
         Handles login request
-
         JSON Structure:
         {
             "action": "login"
@@ -37,7 +54,7 @@ class ActionManager:
                 websocket,
             )
         if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
-            self.certificated |= {client_id: (data["name"], websocket)}
+            self.certed.add(client_id, data["name"], websocket)
             await connection_manager.send_to_client(
                 f"Welcome, {data['name']}!", websocket
             )
@@ -49,7 +66,6 @@ class ActionManager:
     async def new_account(self, data, client_id, connection_manager, websocket):
         """
         Account creation request
-
         JSON Structure:
         {
             "action": "new_account"
@@ -57,7 +73,7 @@ class ActionManager:
             "password": "xxx"
         }
         """
-        if client_id in self.certificated.keys():
+        if client_id in self.certed.id_name.keys():
             await connection_manager.send_to_client(
                 "You are already logged in", websocket
             )
@@ -79,7 +95,7 @@ class ActionManager:
                 f"Username \"{data['name']}\" taken", websocket
             )
             return
-        self.certificated |= {client_id: (data["name"], websocket)}
+        self.certed.add(client_id, data["name"], websocket)
         await connection_manager.send_to_client(
             f"New account created, welcome, {data['name']}!", websocket
         )
@@ -87,22 +103,18 @@ class ActionManager:
     async def query_online_users(self, data, client_id, connection_manager, websocket):
         """
         Returns online users
-
         JSON Structure:
         {
             "action": "query_online_users"
         }
         """
         await connection_manager.send_to_client(
-            ", ".join(
-                vals[0] for vals in self.certificated.values()
-            ), websocket
+            ", ".join(self.certed.id_name.values()), websocket
         )
 
     async def go_hunting(self, data, client_id, connection_manager, websocket):
         """
         Go out into the wild and seek out monsters to fight
-
         JSON Structure:
         {
             "action": "go_hunting"
@@ -113,7 +125,6 @@ class ActionManager:
     async def challenge_player(self, data, client_id, connection_manager, websocket):
         """
         Challenge another player to a fight
-
         JSON Structure:
         {
             "action": "challenge_player"
@@ -125,7 +136,6 @@ class ActionManager:
     async def accept_challenge(self, data, client_id, connection_manager, websocket):
         """
         Accept an incoming challenge
-
         JSON Structure:
         {
             "action": "accept_challenge"
@@ -136,7 +146,6 @@ class ActionManager:
     async def attack(self, data, client_id, connection_manager, websocket):
         """
         Choose an attack to use in the current fight
-
         JSON Structure:
         {
             "action": "attack"
@@ -148,7 +157,6 @@ class ActionManager:
     async def view_shop(self, data, client_id, connection_manager, websocket):
         """
         Look at available shop items
-
         JSON Structure:
         {
             "action": "view_shop"
@@ -159,7 +167,6 @@ class ActionManager:
     async def buy(self, data, client_id, connection_manager, websocket):
         """
         Buy an item from the shop
-
         JSON Structure:
         {
             "action": "buy"
@@ -171,7 +178,6 @@ class ActionManager:
     async def sell(self, data, client_id, connection_manager, websocket):
         """
         Sell an item for gold
-
         JSON Structure:
         {
             "action": "sell"
@@ -183,7 +189,6 @@ class ActionManager:
     async def seek_quest(self, data, client_id, connection_manager, websocket):
         """
         Look up available quests
-
         JSON Structure:
         {
             "action": "seek_quest"
@@ -194,7 +199,6 @@ class ActionManager:
     async def accept_quest(self, data, client_id, connection_manager, websocket):
         """
         Take on a quest
-
         JSON Structure:
         {
             "action": "accept_quest"
@@ -206,7 +210,6 @@ class ActionManager:
     async def fulfil_quest(self, data, client_id, connection_manager, websocket):
         """
         Report back on a completed quest to collect your reward
-
         JSON Structure:
         {
             "action": "fulfil_quest"
@@ -218,7 +221,6 @@ class ActionManager:
     async def inventory(self, data, client_id, connection_manager, websocket):
         """
         Look at the contents of your bag
-
         JSON Structure:
         {
             "action": "inventory"
@@ -229,7 +231,6 @@ class ActionManager:
     async def equip(self, data, client_id, connection_manager, websocket):
         """
         Equip an item
-
         JSON Structure:
         {
             "action": "equip"
@@ -241,7 +242,6 @@ class ActionManager:
     async def use_item(self, data, client_id, connection_manager, websocket):
         """
         Use a consumable item
-
         JSON Structure:
         {
             "action": "use_item"
@@ -253,7 +253,6 @@ class ActionManager:
     async def status(self, data, client_id, connection_manager, websocket):
         """
         Check your health, mana, progress on current quests and other details
-
         JSON Structure:
         {
             "action": "status"
@@ -264,7 +263,6 @@ class ActionManager:
     async def send_trade_offer(self, data, client_id, connection_manager, websocket):
         """
         Offer to initiate a trade with another user
-
         JSON Structure:
         {
             "action": "send_trade_offer"
@@ -276,7 +274,6 @@ class ActionManager:
     async def put_trade(self, data, client_id, connection_manager, websocket):
         """
         Set the items and gold offered in current trade
-
         JSON Structure:
         {
             "action": "put_trade"
@@ -289,7 +286,6 @@ class ActionManager:
     async def accept_trade(self, data, client_id, connection_manager, websocket):
         """
         Accept the terms of trade. Items will be exchanged when both players accept
-
         JSON Structure:
         {
             "action": "accept_trade"
@@ -300,7 +296,6 @@ class ActionManager:
     async def chat(self, data, client_id, connection_manager, websocket):
         """
         Send a chat message to all users
-
         JSON Structure:
         {
             "action": "chat"
@@ -308,13 +303,12 @@ class ActionManager:
         }
         """
         await connection_manager.broadcast(
-            f"[Chat] {self.certificated[client_id][0]}: {data['message']}", websocket
+            f"[Chat] {self.certed.id_name[client_id]}: {data['message']}", websocket
         )
 
     async def direct_message(self, data, client_id, connection_manager, websocket):
         """
         Send a message to another user
-
         JSON Structure:
         {
             "action": "direct_message"
@@ -322,4 +316,7 @@ class ActionManager:
             "user": "xxx"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        await connection_manager.send_to_client(
+            f"[DM] {self.certed.id_name[client_id]}: {data['message']}",
+            self.certed.name_ws[data["user"]]
+        )
