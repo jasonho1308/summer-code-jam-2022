@@ -27,11 +27,11 @@ class Skill:
             return (user, opponent, f"{user.name} is dead, {opponent.name} wins")
         elif opponent.hp <= 0:
             return (user, opponent, f"{opponent.name} is dead, {user.name} wins")
-        if user.energy < energy_cost:
+        if user.energy < self.energy_cost:
             return (
                 user,
                 opponent,
                 f"{user.name} don't have enough energy to cast {self.name}!",
             )
-        user.energy -= energy_cost
+        user.energy -= self.energy_cost
         return _use(user, opponent)
