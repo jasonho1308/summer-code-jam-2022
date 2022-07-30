@@ -16,7 +16,6 @@ class Player(Base):
 
     level = Column(Integer, default=1)
     experience = Column(Integer, default=0)
-    role = Column(String, index=True)
     hp = Column(Integer, default=100)
     max_hp = Column(Integer, default=100)
     energy = Column(Integer, default=25)
