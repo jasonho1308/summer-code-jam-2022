@@ -4,6 +4,17 @@ from sqlalchemy.exc import IntegrityError
 
 from . import database, models
 
+def login_required(func):
+    """When decorator used login will be required on the action specified"""
+    def wrapper(self, data, client_id, connection_manager, websocket):
+        if client_id in self.id_name:
+            return func(*args, **kw)
+        else:
+            await connection_manager.send_to_client(
+                "Login to use the action", websocket
+            )
+    return wrapper
+
 
 class Certificated:
     """Certificating login/new_account creates certificate"""
@@ -102,6 +113,7 @@ class ActionManager:
             f"New account created, welcome, {data['name']}!", websocket
         )
 
+    @login_required
     async def query_online_users(self, data, client_id, connection_manager, websocket):
         """
         Returns online users
@@ -115,6 +127,7 @@ class ActionManager:
             ", ".join(self.certed.id_name.values()), websocket
         )
 
+    @login_required
     async def go_hunting(self, data, client_id, connection_manager, websocket):
         """
         Go out into the wild and seek out monsters to fight
@@ -126,6 +139,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def challenge_player(self, data, client_id, connection_manager, websocket):
         """
         Challenge another player to a fight
@@ -141,6 +155,7 @@ class ActionManager:
             self.certed.name_ws[data["player"]],
         )
 
+    @login_required
     async def accept_challenge(self, data, client_id, connection_manager, websocket):
         """
         Accept an incoming challenge
@@ -152,6 +167,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def attack(self, data, client_id, connection_manager, websocket):
         """
         Choose an attack to use in the current fight
@@ -164,6 +180,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def view_shop(self, data, client_id, connection_manager, websocket):
         """
         Look at available shop items
@@ -175,6 +192,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def buy(self, data, client_id, connection_manager, websocket):
         """
         Buy an item from the shop
@@ -187,6 +205,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def sell(self, data, client_id, connection_manager, websocket):
         """
         Sell an item for gold
@@ -199,6 +218,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def seek_quest(self, data, client_id, connection_manager, websocket):
         """
         Look up available quests
@@ -210,6 +230,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def accept_quest(self, data, client_id, connection_manager, websocket):
         """
         Take on a quest
@@ -222,6 +243,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def fulfil_quest(self, data, client_id, connection_manager, websocket):
         """
         Report back on a completed quest to collect your reward
@@ -234,6 +256,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def inventory(self, data, client_id, connection_manager, websocket):
         """
         Look at the contents of your bag
@@ -245,6 +268,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def equip(self, data, client_id, connection_manager, websocket):
         """
         Equip an item
@@ -257,6 +281,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def use_item(self, data, client_id, connection_manager, websocket):
         """
         Use a consumable item
@@ -269,6 +294,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def status(self, data, client_id, connection_manager, websocket):
         """
         Check your health, mana, progress on current quests and other details
@@ -280,6 +306,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def send_trade_offer(self, data, client_id, connection_manager, websocket):
         """
         Offer to initiate a trade with another user
@@ -292,6 +319,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def put_trade(self, data, client_id, connection_manager, websocket):
         """
         Set the items and gold offered in current trade
@@ -305,6 +333,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def accept_trade(self, data, client_id, connection_manager, websocket):
         """
         Accept the terms of trade. Items will be exchanged when both players accept
@@ -316,6 +345,7 @@ class ActionManager:
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
+    @login_required
     async def chat(self, data, client_id, connection_manager, websocket):
         """
         Send a chat message to all users
@@ -330,6 +360,7 @@ class ActionManager:
             f"[Chat] {self.certed.id_name[client_id]}: {data['message']}"
         )
 
+    @login_required
     async def direct_message(self, data, client_id, connection_manager, websocket):
         """
         Send a message to another user
