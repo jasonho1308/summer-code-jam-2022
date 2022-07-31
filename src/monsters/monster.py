@@ -2,6 +2,7 @@ import random
 from collections import defaultdict
 
 from ..skills.skill import Skill
+from ..items.item import Item
 
 
 class Monster:
@@ -19,6 +20,8 @@ class Monster:
     dexterity: int
     charisma: int
     skills: list[Skill]
+    gold: int
+    items: list[Item]
 
     @property
     def name(self):
@@ -32,8 +35,13 @@ class Monster:
 
     def drop_loot(self) -> dict:
         """Generate loot"""
-        pass
-
+        loot = {}
+        loot["xp"] = level * 10
+        if hasattr(self, "gold"):
+            loot["gold"] = self.gold
+        if hasattr(self, "items"):
+            loot["items"] = [random.choice(self.items)]
+        return loot
 
 class MonsterCatalog:
     """Wrapper for organising monsters"""
