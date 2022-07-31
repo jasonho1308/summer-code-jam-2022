@@ -16,6 +16,7 @@ class Player:
     stamina: int
     dexterity: int
     charisma: int
+    gold: int
 
     is_offender: bool
     amount_of_skills_used: int
@@ -44,18 +45,17 @@ class PVPFight:
     def __init__(self, offender, defender) -> None:
         """Initalizes the fight"""
         self.offender = Player(offender)
+        self.offender.is_offender = True
         self.defender = Player(defender)
 
-    def use_skill(self, caster: Player, castee: Player, skill: Skill) -> str:
+    def use_skill(self, caster: Player, castee: Player, skill: Skill) -> tuple[str, int]:
         """Called when skill used
-
         str: combat log to send back to user
         int: combat result
             -1 = both loses
             0  = continue
             1  = offender wins
             2  = defender wins
-        int: winner's prize
         """
         cast = skill.use(caster, castee)
         combat_log = cast[2]
@@ -70,10 +70,12 @@ class PVPFight:
             return (combat_log, -1)
         elif self.offender.hp <= 0:
             combat_log += f"\n{self.offender.name} has fallen."
-            return (combat_log, 2, self.gold_amount_got())
+            self.offender.gold += self.gold_amount_got(self.offender)
+            return (combat_log, 2)
         elif self.defender.hp <= 0:
             combat_log += f"\n{self.defender.name} has fallen"
-            return (combat_log, 1, self.gold_amount_got())
+            self.offender.gold += self.gold_amount_got(self.offender)
+            return (combat_log, 1)
         else:
             return (combat_log, 0)
 
@@ -101,7 +103,6 @@ class PVEFight:
 
     def use_skill(self, skill: Skill) -> tuple[str, int | dict]:
         """Run one round of combat
-
         str: combat log to send back to user
         int: combat result. -1 is player loss, 0 is combat continues, dict return value is rewards for player win.
         """
