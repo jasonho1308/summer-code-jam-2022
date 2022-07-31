@@ -167,7 +167,7 @@ class ActionManager:
                 websocket,
             )
         if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
-            self.certed.add(client_id, data["name"], websocket)
+            self.certed.add(client_id, data["name"].trim("'"), websocket)
             await connection_manager.send_to_client(
                 f"Welcome, {data['name']}!", websocket
             )
