@@ -576,45 +576,6 @@ class ActionManager:
         await connection_manager.send_to_client("\n".join(player_data), websocket)
 
     @login_required
-    async def send_trade_offer(self, data, client_id, connection_manager, websocket):
-        """
-        Offer to initiate a trade with another user
-
-        JSON Structure:
-        {
-            "action": "send_trade_offer"
-            "user": "xxx"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
-    async def put_trade(self, data, client_id, connection_manager, websocket):
-        """
-        Set the items and gold offered in current trade
-
-        JSON Structure:
-        {
-            "action": "put_trade"
-            "items": [id1, id2]
-            "gold": 123
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
-    async def accept_trade(self, data, client_id, connection_manager, websocket):
-        """
-        Accept the terms of trade. Items will be exchanged when both players accept
-
-        JSON Structure:
-        {
-            "action": "accept_trade"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
     async def chat(self, data, client_id, connection_manager, websocket):
         """
         Send a chat message to all users
