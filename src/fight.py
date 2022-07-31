@@ -38,13 +38,13 @@ class Player:
         self.amount_of_skills_used = 0
 
 
-class Fight:
+class PVPFight:
     """Handles Fight actions"""
 
-    def __init__(self, offender: Player, defender: Player) -> None:
+    def __init__(self, offender, defender) -> None:
         """Initalizes the fight"""
-        self.offender = offender
-        self.defender = defender
+        self.offender = Player(offender)
+        self.defender = Player(defender)
 
     def use_skill(self, caster: Player, castee: Player, skill: Skill) -> str:
         """Called when one uses skill"""
