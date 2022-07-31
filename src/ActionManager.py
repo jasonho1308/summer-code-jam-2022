@@ -336,12 +336,12 @@ class ActionManager:
         JSON Structure:
         {
             "action": "attack"
-            "attack": "xxx"
+            "skill": "xxx"
         }
         """
         player = self.get_player_with_client_id(client_id)
 
-        skill = skills.get(data["attack"].casefold())
+        skill = skills.get(data["skill"].casefold())
         if skill is None:
             await connection_manager.send_to_client(
                 "Skill doesn't exist", websocket,
@@ -355,6 +355,15 @@ class ActionManager:
             await connection_manager.send_to_client(
                 self.sessions.attack(self.certed.id_name[client_id], skill, websocket), websocket,
             )
+
+    @login_required
+    async def list_skills(self, data, client_id, connection_manager, websocket):
+        """List the player's current list of learned skills"""
+        player = self.get_player_with_client_id(client_id)
+        learned_skills = [repr(skill.name) for skill in skills.values() if skill.learnt(player)]
+        await connection_manager.send_to_client(
+            "\n".join(learned_skills), websocket
+        )
 
     @login_required
     async def view_shop(self, data, client_id, connection_manager, websocket):

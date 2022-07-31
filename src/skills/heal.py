@@ -8,6 +8,14 @@ class Heal(Skill):
 
     chance = 0.85
 
+    # Skill requirements for players
+    level = 1
+    strength = 1
+    intelligence = 1
+    stamina = 1
+    dexterity = 1
+    charisma = 1
+
     def _use(self, caster, castee) -> str:
         """Skill implementation"""
         if random.random() > self.chance:

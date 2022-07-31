@@ -8,7 +8,7 @@ class Bite(Skill):
     energy_cost = 0
     chance = 0.65
 
-    # Requirements for players if we get around to players learning skills
+    # Skill requirements for players
     level = 1
     strength = 1
     intelligence = 1
