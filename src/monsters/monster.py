@@ -45,6 +45,6 @@ class MonsterCatalog:
         for monster in all_monsters:
             self.catalog[monster.level].append(monster)
 
-    def select_level(self, level):
+    def select_monster_of_level(self, level):
         """Pick a random level appropriate monster"""
         return random.choice(self.catalog[level])()

@@ -117,7 +117,7 @@ class PVEFight:
 
     def __init__(self, player) -> None:
         """Generate a new fight"""
-        self.monster = catalog.select_level(player.level)
+        self.monster = catalog.select_monster_of_level(player.level)
         self.player = Player(player)
 
     def use_skill(self, skill: Skill) -> tuple[str, int | dict]:

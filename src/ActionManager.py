@@ -80,7 +80,7 @@ class Sessions:
                             "max_hp": player.max_hp,
                             "energy": player.energy,
                             "strength": player.strength,
-                            "intellegence": player.intellegence,
+                            "intelligence": player.intelligence,
                             "stamina": player.stamina,
                             "dexterity": player.dexterity,
                             "charisma": player.charisma,
@@ -88,8 +88,8 @@ class Sessions:
                         }
                     )
             else:
-                defender = fight.defender
-                offender = fight.offender
+                defender: Player = fight.defender
+                offender: Player = fight.offender
                 with database.SessionLocal() as db:
                     db.query(Player).filter(Player.name == defender.name).update(
                         {
@@ -99,7 +99,7 @@ class Sessions:
                             "max_hp": defender.max_hp,
                             "energy": defender.energy,
                             "strength": defender.strength,
-                            "intellegence": defender.intellegence,
+                            "intelligence": defender.intelligence,
                             "stamina": defender.stamina,
                             "dexterity": defender.dexterity,
                             "charisma": defender.charisma,
@@ -114,7 +114,7 @@ class Sessions:
                             "max_hp": offender.max_hp,
                             "energy": offender.energy,
                             "strength": offender.strength,
-                            "intellegence": offender.intellegence,
+                            "intelligence": offender.intelligence,
                             "stamina": offender.stamina,
                             "dexterity": offender.dexterity,
                             "charisma": offender.charisma,
@@ -141,6 +141,11 @@ class ActionManager:
     running_pvps = RunningPVPs()
     sessions = Sessions()
     pvp_sessions = {}
+
+    def get_player_with_client_id(self, client_id):
+        """Get a Player object from a client id"""
+        with database.SessionLocal() as db:
+            return db.query(Player).filter_by(name=self.certed.id_name[client_id]).one()
 
     async def login(self, data, client_id, connection_manager, websocket):
         """
@@ -238,10 +243,7 @@ class ActionManager:
             "action": "go_hunting"
         }
         """
-        with database.SessionLocal() as db:
-            player = (
-                db.query(Player).filter_by(name=self.certed.id_name[client_id]).one()
-            )
+        player = self.get_player_with_client_id(client_id)
 
         if self.sessions.is_fighting(player.name):
             await connection_manager.send_to_client(
@@ -466,7 +468,7 @@ class ActionManager:
         await connection_manager.send_to_client("Not yet implemented", websocket)
 
     @login_required
-    async def status(self, data, client_id, connection_manager, websocket):
+    async def view_status(self, data, client_id, connection_manager, websocket):
         """
         Check your health, mana, progress on current quests and other details
 
@@ -475,7 +477,40 @@ class ActionManager:
             "action": "status"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        player = self.get_player_with_client_id(client_id)
+        player_data = [
+            f"name: {player.name}",
+            f"level: {player.level}",
+            f"gold: {player.gold}",
+            f"hp: {player.hp}/{player.max_hp}",
+            f"energy: {player.energy}/{player.max_energy}",
+        ]
+        await connection_manager.send_to_client("\n".join(player_data), websocket)
+
+    @login_required
+    async def view_status_full(self, data, client_id, connection_manager, websocket):
+        """
+        Check your health, mana, progress on current quests and other details
+
+        JSON Structure:
+        {
+            "action": "status"
+        }
+        """
+        player = self.get_player_with_client_id(client_id)
+        player_data = [
+            f"name: {player.name}",
+            f"level: {player.level}",
+            f"gold: {player.gold}",
+            f"hp: {player.hp}/{player.max_hp}",
+            f"energy: {player.energy}/{player.max_energy}",
+            f"strength: {player.strength}",
+            f"intelligence: {player.intelligence}",
+            f"dexterity: {player.dexterity}",
+            f"stamina: {player.stamina}",
+            f"charisma: {player.charisma}",
+        ]
+        await connection_manager.send_to_client("\n".join(player_data), websocket)
 
     @login_required
     async def send_trade_offer(self, data, client_id, connection_manager, websocket):
