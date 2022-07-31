@@ -19,9 +19,7 @@ def login_required(func):
         if client_id in self.certed.id_name:
             return await func(self, data, client_id, connection_manager, websocket)
         else:
-            await connection_manager.send_to_client(
-                "Login to use the action", websocket
-            )
+            await connection_manager.send_to_client("Login to use the action", websocket)
 
     return wrapper
 
@@ -166,17 +164,14 @@ class ActionManager:
         """
         with database.SessionLocal() as db:
             hashed = db.execute(
-                select(
-                    Player.hashed_password,
-                ).where(Player.name == data["name"])
+                select(Player.hashed_password,).where(Player.name == data["name"])
             )
         result = None
         for row in hashed:
             result = row.hashed_password
         if result is None:
             await connection_manager.send_to_client(
-                f"No account with username {data['name']} found",
-                websocket,
+                f"No account with username {data['name']} found", websocket
             )
         if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
             self.certed.add(client_id, data["name"], websocket)
@@ -256,11 +251,8 @@ class ActionManager:
             if curr_fight.fight_type == "PVE":
                 message += f"a {curr_fight.monster.name}!"
             elif curr_fight.fight_type == "PVP":
-                opponent = [
-                    user
-                    for user in (curr_fight.offender, curr_fight.defender)
-                    if user.name != player.name
-                ][0]
+                opponent = [user for user in (curr_fight.offender, curr_fight.defender)
+                            if user.name != player.name][0]
                 message += f"user {opponent.name}!"
             await connection_manager.send_to_client(message, websocket)
         else:
@@ -311,16 +303,8 @@ class ActionManager:
             if client_id == pvp_inter.defender_id[lobby]:
                 if time.time() <= pvp_inter.countdown[lobby]:
                     with database.SessionLocal() as db:
-                        offender = (
-                            db.query(Player)
-                            .filter_by(name=pvp_inter.offender_id[lobby])
-                            .one()
-                        )
-                        defender = (
-                            db.query(Player)
-                            .filter_by(name=pvp_inter.defender_id[lobby])
-                            .one()
-                        )
+                        offender = db.query(Player).filter_by(name=pvp_inter.offender_id[lobby]).one()
+                        defender = db.query(Player).filter_by(name=pvp_inter.defender_id[lobby]).one()
                     if self.sessions.is_fighting(defender.name):
                         await connection_manager.send_to_client(
                             "You are already in a fight!", websocket
@@ -333,18 +317,15 @@ class ActionManager:
                         )
                 else:
                     await connection_manager.send_to_client(
-                        "Time reached!",
-                        websocket,
+                        "Time reached!", websocket,
                     )
             else:
                 await connection_manager.send_to_client(
-                    "You're not the player for the lobby!",
-                    websocket,
+                    "You're not the player for the lobby!", websocket,
                 )
         else:
             await connection_manager.send_to_client(
-                "Invalid lobby ID!",
-                websocket,
+                "Invalid lobby ID!", websocket,
             )
 
     @login_required
@@ -363,14 +344,12 @@ class ActionManager:
         skill = skills.get(
             data["attack"].casefold(),
             await connection_manager.send_to_client(
-                "Skill doesn't exist",
-                websocket,
+                "Skill doesn't exist", websocket,
             ),
         )
         if not skill.learnt(player):
             await connection_manager.send_to_client(
-                "Skill not learnt",
-                websocket,
+                "Skill not learnt", websocket,
             )
         if skill:
             self.sessions.attack(self.certed.id_name[client_id], skill, websocket)
