@@ -1,3 +1,6 @@
+import time
+import uuid
+
 import bcrypt
 from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
@@ -41,7 +44,7 @@ class Certificated:
 class Sessions:
     """Track temporary sessions for users"""
 
-    fights = {}
+    fights = []
 
     def add_pve_fight(self, player):
         """Begin tracking a PVE fight"""
@@ -63,10 +66,17 @@ class Sessions:
         return result[0]
 
 
+class PVPIntermission:
+    lobby = []
+    client_id = {}
+    countdown = {}
+
+
 class ActionManager:
     """Handling actions from client"""
 
     certed = Certificated()
+    pvp_intermission = PVPIntermission()
 
     async def login(self, data, client_id, connection_manager, websocket):
         """
@@ -179,9 +189,17 @@ class ActionManager:
             "player": "xxx"
         }
         """
+        lobby = uuid.uuid4()
+        self.pvp_intermission.lobby.append(lobby)
+        self.pvp_intermission.client_id |= {lobby: client_id}
+        self.pvp_intermission.countdown |= {lobby: time.time() + 30}
         await connection_manager.send_to_client(
-            f"Challenge from {self.certed.id_name[client_id]}. Accept? (Response with `accept_challenge`)",
+            f"Challenge from {self.certed.id_name[client_id]}. Lobby ID: {lobby}",
             self.certed.name_ws[data["player"]],
+        )
+        await connection_manager.send_to_client(
+            "Challenge sent",
+            websocket,
         )
 
     @login_required
@@ -192,9 +210,31 @@ class ActionManager:
         JSON Structure:
         {
             "action": "accept_challenge"
+            "lobby": "xxx"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        lobby = data["lobby"]
+        pvp_inter = self.pvp_intermission
+        if lobby in pvp_inter.lobby:
+            if client_id == pvp_inter.client_id.pop(lobby):
+                if time.time() <= pvp_inter.countdown.pop(lobby):
+                    # TODO: add a session
+                    ...
+                else:
+                    await connection_manager.send_to_client(
+                        "Time reached!",
+                        websocket,
+                    )
+            else:
+                await connection_manager.send_to_client(
+                    "You're not the player for the lobby!",
+                    websocket,
+                )
+        else:
+            await connection_manager.send_to_client(
+                "Invalid lobby ID!",
+                websocket,
+            )
 
     @login_required
     async def attack(self, data, client_id, connection_manager, websocket):
