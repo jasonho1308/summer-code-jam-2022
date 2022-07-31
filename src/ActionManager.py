@@ -499,6 +499,7 @@ class ActionManager:
         player_data = [
             f"name: {player.name}",
             f"level: {player.level}",
+            f"exp: {player.experience}",
             f"gold: {player.gold}",
             f"hp: {player.hp}/{player.max_hp}",
             f"energy: {player.energy}/{player.max_energy}",
@@ -519,6 +520,7 @@ class ActionManager:
         player_data = [
             f"name: {player.name}",
             f"level: {player.level}",
+            f"exp: {player.experience}",
             f"gold: {player.gold}",
             f"hp: {player.hp}/{player.max_hp}",
             f"energy: {player.energy}/{player.max_energy}",
