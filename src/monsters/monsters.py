@@ -87,3 +87,38 @@ class Goblin(Monster):
     gold = 10
 
     skills = [skills["bite"], skills["strike"]]
+
+
+class Slime(Monster):
+    """An inexplicably sentient mass of slime"""
+
+    level = 2
+    hp = 60
+    max_hp = 60
+    energy = 0
+    max_energy = 0
+    strength = 1
+    intelligence = 0
+    stamina = 0
+    dexterity = 0
+    charisma = 0
+
+    skills = [skills["bubble"]]
+
+
+class Hobgoblin(Monster):
+    """An even more disgusting and cheeky creature"""
+
+    level = 3
+    hp = 60
+    max_hp = 60
+    energy = 0
+    max_energy = 0
+    strength = 12
+    intelligence = 2
+    stamina = 2
+    dexterity = 0
+    charisma = 0
+    gold = 30
+
+    skills = [skills["bite"], skills["strike"]]

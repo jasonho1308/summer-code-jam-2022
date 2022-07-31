@@ -8,4 +8,6 @@ monsters = [
     Quokka,
     Bandit,
     Goblin,
+    Slime,
+    Hobgoblin
 ]
