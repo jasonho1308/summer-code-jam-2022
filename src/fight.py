@@ -48,7 +48,9 @@ class Player:
             self.experience -= self.level * 100
             self.level += 1
             self.max_hp += 5
+            self.hp = self.max_hp
             self.max_energy += 2
+            self.energy = self.max_energy
             self.strength += 1
             self.intelligence += 1
             self.stamina += 1
@@ -133,11 +135,17 @@ class PVEFight:
         if self.player.hp > 0 and self.monster.hp > 0:
             combat_log += "\n" + self.monster.attack(self.player)
 
-        if self.player.hp <= 0 and self.monster.hp <= 0:
-            combat_log += "\nBoth combatants have fallen."
+        if self.player.hp <= 0:
+            if self.monster.hp <= 0:
+                combat_log += "\nBoth combatants have fallen."
+            else:
+                combat_log += "\nYou have fallen."
+            self.player.hp = self.player.max_hp
+            self.player.energy = self.player.max_energy
+            combat_log += f"\nYou find yourself back in town, your purse {int(self.player.gold * 0.75)} gold lighter"
+            self.player.gold = int(self.player.gold * 0.25)
             return combat_log, -1
         elif self.player.hp <= 0:
-            combat_log += "\nYou have fallen."
             return combat_log, -1
         elif self.monster.hp <= 0:
             loot = self.monster.drop_loot()
@@ -148,7 +156,7 @@ class PVEFight:
             if "items" in loot:
                 for i in loot["items"]:
                     combat_log += f"\nGained {i.name}"
-            self.player.experience += loot["xp"]
+            self.player.add_exp(loot["xp"])
             return combat_log, loot
         else:
             return combat_log, 0
