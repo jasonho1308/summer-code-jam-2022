@@ -50,7 +50,7 @@ class Quokka(Monster):
     dexterity = 0
     charisma = 0
 
-    skills = [skills["bubble"]]
+    skills = [skills["bite"]]
 
 
 class Bandit(Monster):
