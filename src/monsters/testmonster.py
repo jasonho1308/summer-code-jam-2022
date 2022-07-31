@@ -11,7 +11,7 @@ class TestMonster(Monster):
     max_hp = 200
     energy = 0
     max_energy = 0
-    strength = 20
+    strength = 1
     intelligence = 0
     stamina = 0
     dexterity = 0
