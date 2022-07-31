@@ -440,19 +440,6 @@ class ActionManager:
         await connection_manager.send_to_client(message, websocket)
 
     @login_required
-    async def sell(self, data, client_id, connection_manager, websocket):
-        """
-        Sell an item for gold
-
-        JSON Structure:
-        {
-            "action": "sell"
-            "item": "xxx"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
     async def seek_quest(self, data, client_id, connection_manager, websocket):
         """
         Look up available quests
@@ -486,44 +473,6 @@ class ActionManager:
         {
             "action": "fulfil_quest"
             "quest": "xxx"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
-    async def inventory(self, data, client_id, connection_manager, websocket):
-        """
-        Look at the contents of your bag
-
-        JSON Structure:
-        {
-            "action": "inventory"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
-    async def equip(self, data, client_id, connection_manager, websocket):
-        """
-        Equip an item
-
-        JSON Structure:
-        {
-            "action": "equip"
-            "item": "xxx"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
-    async def use_item(self, data, client_id, connection_manager, websocket):
-        """
-        Use a consumable item
-
-        JSON Structure:
-        {
-            "action": "use_item"
-            "item": "xxx"
         }
         """
         await connection_manager.send_to_client("Not yet implemented", websocket)

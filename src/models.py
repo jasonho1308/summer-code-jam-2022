@@ -1,5 +1,4 @@
-from sqlalchemy import JSON, TIMESTAMP, Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import TIMESTAMP, Boolean, Column, Integer, String
 
 from .database import Base, engine
 
@@ -29,22 +28,6 @@ class Player(Base):
     gold = Column(Integer, default=0)
     pve_cooldown = Column(TIMESTAMP)
     pvp_cooldown = Column(TIMESTAMP)
-
-
-class Item(Base):
-    """Item in ORM"""
-
-    __tablename__ = "items"
-
-    item_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
-    title = Column(String, index=True)
-    item_type = Column(String)
-    equipped = Column(Boolean)
-    amount = Column(Integer)
-    item_info = Column(JSON)
-    owner = Column(Integer, ForeignKey("players.UUID"), index=True)
-
-    players = relationship("Player")
 
 
 Base.metadata.create_all(engine)
