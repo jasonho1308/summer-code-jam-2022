@@ -6,6 +6,8 @@ import bcrypt
 from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 
+from src.shop import Shop
+
 from . import database
 from .fight import PVEFight, PVPFight
 from .models import Player
@@ -144,6 +146,7 @@ class ActionManager:
     certed = Certificated()
     running_pvps = RunningPVPs()
     sessions = Sessions()
+    shop = Shop()
     pvp_sessions = {}
 
     def get_player_with_client_id(self, client_id):
@@ -173,7 +176,7 @@ class ActionManager:
             await connection_manager.send_to_client(
                 f"No account with username {data['name']} found", websocket
             )
-        if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
+        elif bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
             self.certed.add(client_id, data["name"], websocket)
             await connection_manager.send_to_client(
                 f"Welcome, {data['name']}!", websocket
@@ -380,7 +383,9 @@ class ActionManager:
             "action": "view_shop"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        await connection_manager.send_to_client(
+            "\n".join(self.shop.display_shop()), websocket
+        )
 
     @login_required
     async def buy(self, data, client_id, connection_manager, websocket):
@@ -393,7 +398,8 @@ class ActionManager:
             "item": "xxx"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        message = self.shop.buy(data["item"], self.get_player_with_client_id(client_id))
+        await connection_manager.send_to_client(message, websocket)
 
     @login_required
     async def sell(self, data, client_id, connection_manager, websocket):
