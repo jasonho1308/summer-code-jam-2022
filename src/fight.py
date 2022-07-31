@@ -90,11 +90,11 @@ class PVPFight:
         elif self.offender.hp <= 0:
             combat_log += f"\n{self.offender.name} has fallen."
             self.offender.gold += self.gold_amount_got(self.offender)
-            return combat_log, 2
+            return combat_log, 2, self.defender, self.offender
         elif self.defender.hp <= 0:
             combat_log += f"\n{self.defender.name} has fallen"
             self.offender.gold += self.gold_amount_got(self.offender)
-            return combat_log, 1
+            return combat_log, 1, self.defender, self.offender
         else:
             return combat_log, 0
 
