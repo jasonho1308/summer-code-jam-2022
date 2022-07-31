@@ -345,7 +345,7 @@ class ActionManager:
             await connection_manager.send_to_client(
                 "Skill doesn't exist",
                 websocket,
-            )
+            ),
         )
         # TODO: check skill requirements
         if skill:
