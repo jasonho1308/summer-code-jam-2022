@@ -440,44 +440,6 @@ class ActionManager:
         await connection_manager.send_to_client(message, websocket)
 
     @login_required
-    async def seek_quest(self, data, client_id, connection_manager, websocket):
-        """
-        Look up available quests
-
-        JSON Structure:
-        {
-            "action": "seek_quest"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
-    async def accept_quest(self, data, client_id, connection_manager, websocket):
-        """
-        Take on a quest
-
-        JSON Structure:
-        {
-            "action": "accept_quest"
-            "quest": "xxx"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
-    async def fulfil_quest(self, data, client_id, connection_manager, websocket):
-        """
-        Report back on a completed quest to collect your reward
-
-        JSON Structure:
-        {
-            "action": "fulfil_quest"
-            "quest": "xxx"
-        }
-        """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
-
-    @login_required
     async def view_status(self, data, client_id, connection_manager, websocket):
         """
         Check your health, mana, progress on current quests and other details
