@@ -21,36 +21,29 @@ class Skill:
         """The name of the skill"""
         return self.__class__.__name__
 
-    @classmethod
-    def _use(cls, user, opponent) -> str:
+    def _use(self, user, opponent) -> str:
         """Skill implementation"""
-        if random.random() < cls.chance:
+        if random.random() < self.chance:
             damage = int(user.strength * (random.random() + 1))
             opponent.hp -= damage
-            return f"{user.name()!r} uses {cls.name()!r} for {damage} damage"
+            return f"{user.name!r} uses {self.name!r} for {damage} damage"
         else:
-            return f"{user.name()!r} tried to use {cls.name()!r} but missed!"
+            return f"{user.name!r} tried to use {self.name!r} but missed!"
 
-    @classmethod
-    def use(cls, user, opponent):
+    def use(self, user, opponent):
         """Decorator for _use, used for checking if skill usable"""
-        if user.energy < cls.energy_cost:
-            return (
-                user,
-                opponent,
-                f"{user.name!r} doesn't have enough energy to cast {cls.name!r}!",
-            )
-        user.energy -= cls.energy_cost
-        return cls._use(user, opponent)
+        if user.energy < self.energy_cost:
+            return user, opponent, f"{user.name!r} doesn't have enough energy to cast {self.name!r}!"
+        user.energy -= self.energy_cost
+        return self._use(user, opponent)
 
-    @classmethod
-    def learnt(cls, player):
+    def learnt(self, player):
         """Check if skill is learnt by user"""
         return (
-            player.level >= cls.level
-            and player.strength >= cls.strength
-            and player.intelligence >= cls.intelligence
-            and player.stamina >= cls.stamina
-            and player.dexterity >= cls.dexterity
-            and player.charisma >= cls.charisma
+            player.level >= self.level
+            and player.strength >= self.strength
+            and player.intelligence >= self.intelligence
+            and player.stamina >= self.stamina
+            and player.dexterity >= self.dexterity
+            and player.charisma >= self.charisma
         )
