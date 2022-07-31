@@ -34,9 +34,13 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 await getattr(action_manager, data["action"])(
                     data, client_id, connection_manager, websocket
                 )
-            except (AttributeError, KeyError):
+            except AttributeError:
                 await connection_manager.send_to_client(
                     "Invalid action specified", websocket
+                )
+            except KeyError as e:
+                await connection_manager.send_to_client(
+                    f"Invalid data, did you mean '{e}'?", websocket
                 )
             except Exception as e:
                 await connection_manager.send_to_client(str(e), websocket)
@@ -46,6 +50,6 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
         connection_manager.disconnect(websocket)
     except JSONDecodeError:
         await connection_manager.send_to_client(
-            "Wrong data sent. Please send a JSON string instead (Hint: JSON.stringify).",
+            "Invalid JSON string",
             websocket,
         )
