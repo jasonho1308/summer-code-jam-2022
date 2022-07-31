@@ -6,10 +6,12 @@ class Item:
     slot = None
     stackable = False
 
+    @classmethod
     def use(player):
         """Implement effects on the player on use here"""
         pass
 
+    @classmethod
     def equipped(player):
         """Implement effects on the player while equipped here"""
         pass

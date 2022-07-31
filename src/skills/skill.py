@@ -22,25 +22,27 @@ class Skill:
         """The name of the skill"""
         return self.__class__.__name__
 
-    def _use(self, user, opponent) -> str:
+    @classmethod
+    def _use(cls, user, opponent) -> str:
         """Skill implementation"""
-        if random.random() < self.chance:
+        if random.random() < cls.chance:
             damage = int(user.strength * (random.random() + 1))
             opponent.hp -= damage
-            return f"{user.name!r} uses {self.name!r} for {damage} damage"
+            return f"{user.name!r} uses {cls.name!r} for {damage} damage"
         else:
-            return f"{user.name!r} tried to use {self.name!r} but missed!"
+            return f"{user.name!r} tried to use {cls.name!r} but missed!"
 
-    def use(self, user, opponent):
+    @classmethod
+    def use(cls, user, opponent):
         """Decorator for _use, used for checking if skill usable"""
-        if user.energy < self.energy_cost:
+        if user.energy < cls.energy_cost:
             return (
                 user,
                 opponent,
-                f"{user.name!r} doesn't have enough energy to cast {self.name!r}!",
+                f"{user.name!r} doesn't have enough energy to cast {cls.name!r}!",
             )
-        user.energy -= self.energy_cost
-        return self._use(user, opponent)
+        user.energy -= cls.energy_cost
+        return cls._use(user, opponent)
 
     @classmethod
     def learnt(cls, player):

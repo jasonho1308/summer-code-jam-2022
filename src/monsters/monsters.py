@@ -1,4 +1,4 @@
-from .. import skills
+from ..skills import skills
 from .monster import Monster
 
 
@@ -16,7 +16,7 @@ class Goldfish(Monster):
     dexterity = 0
     charisma = 0
 
-    skills = [skills.bubble]
+    skills = [skills["bubble"]]
 
 
 class Rat(Monster):
@@ -33,7 +33,7 @@ class Rat(Monster):
     dexterity = 0
     charisma = 0
 
-    skills = [skills.bite]
+    skills = [skills["bite"]]
 
 
 class Quokka(Monster):
@@ -50,7 +50,7 @@ class Quokka(Monster):
     dexterity = 0
     charisma = 0
 
-    skills = [skills.bubble]
+    skills = [skills["bubble"]]
 
 
 class Bandit(Monster):
@@ -68,7 +68,7 @@ class Bandit(Monster):
     dexterity = 0
     charisma = 0
 
-    skills = [skills.strike]
+    skills = [skills["strike"]]
 
 
 class Goblin(Monster):
@@ -86,4 +86,4 @@ class Goblin(Monster):
     dexterity = 0
     charisma = 0
 
-    skills = [skills.bite, skills.strike]
+    skills = [skills["bite"], skills["strike"]]
