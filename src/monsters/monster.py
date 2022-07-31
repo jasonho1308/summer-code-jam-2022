@@ -1,8 +1,7 @@
+import random
 from collections import defaultdict
-from random import choice
 
-from . import monsters
-from .skill import Skill
+from ..skill import Skill
 
 
 class Monster:
@@ -23,7 +22,7 @@ class Monster:
 
     def attack(self, player):
         """Select random monster skill"""
-        return choice(self.skills)(self, player)
+        return random.choice(self.skills)(self, player)
 
     def drop_loot(self) -> dict:
         """Generate loot"""
@@ -35,13 +34,12 @@ class MonsterCatalog:
 
     def __init__(self):
         """Organise monsters by level"""
+        from . import all_monsters
+
         self.catalog = defaultdict(list)
-        [
-            self.catalog[cls.level].append(cls)
-            for name, cls in monsters.__dict__.items()
-            if isinstance(cls, type)
-        ]
+        for monster in all_monsters:
+            self.catalog[monster.level].append(monster)
 
     def select_level(self, level):
         """Pick a random level appropriate monster"""
-        return choice(self.catalog[level])
+        return random.choice(self.catalog[level])

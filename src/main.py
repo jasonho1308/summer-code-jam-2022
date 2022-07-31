@@ -1,3 +1,4 @@
+import traceback
 import uuid
 from json import JSONDecodeError
 
@@ -44,8 +45,10 @@ async def websocket_endpoint(websocket: WebSocket):
                 await connection_manager.send_to_client(
                     f"Invalid data, did you mean '{e}'?", websocket
                 )
-            except Exception as e:
-                await connection_manager.send_to_client(str(e), websocket)
+            except Exception:
+                await connection_manager.send_to_client(
+                    traceback.format_exc(), websocket
+                )
     except WebSocketDisconnect:
         if client_id in action_manager.certed.id_name.keys():
             action_manager.certed.delete(client_id)

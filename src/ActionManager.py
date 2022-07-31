@@ -189,12 +189,11 @@ class ActionManager:
         }
         """
         db = database.SessionLocal()
-        player = db.execute(
-            models.Player.select().where(
-                models.Player.name == self.certed.id_name[client_id]
-            )
-        ).fetchone()
+        player = (
+            db.query(models.Player).filter_by(name=self.certed.id_name[client_id]).one()
+        )
         db.close()
+
         if self.sessions.is_fighting(player.name):
             await connection_manager.send_to_client(
                 "You are already in a fight!", websocket

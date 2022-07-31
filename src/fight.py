@@ -1,4 +1,4 @@
-from .monster import Monster, MonsterCatalog
+from .monsters import Monster, MonsterCatalog
 from .skill import Skill
 
 
@@ -70,17 +70,17 @@ class PVPFight:
             self.defender = cast[0]  # caster
         if self.defender.hp <= 0 and self.offender.hp <= 0:
             combat_log += "\nBoth combatants have fallen."
-            return (combat_log, -1)
+            return combat_log, -1
         elif self.offender.hp <= 0:
             combat_log += f"\n{self.offender.name} has fallen."
             self.offender.gold += self.gold_amount_got(self.offender)
-            return (combat_log, 2)
+            return combat_log, 2
         elif self.defender.hp <= 0:
             combat_log += f"\n{self.defender.name} has fallen"
             self.offender.gold += self.gold_amount_got(self.offender)
-            return (combat_log, 1)
+            return combat_log, 1
         else:
-            return (combat_log, 0)
+            return combat_log, 0
 
     def gold_amount_got(self, winner: Player) -> int:
         """Calculate the gold obtained when one wins"""
@@ -122,12 +122,12 @@ class PVEFight:
 
         if self.player.hp <= 0 and self.monster.hp <= 0:
             combat_log += "\nBoth combatants have fallen."
-            return (combat_log, -1)
+            return combat_log, -1
         elif self.player.hp <= 0:
             combat_log += "\nYou have fallen."
-            return (combat_log, -1)
+            return combat_log, -1
         elif self.monster.hp <= 0:
             combat_log += f"\nYou have defeated {self.monster.name}."
-            return (combat_log, self.monster.generate_loot())
+            return combat_log, self.monster.generate_loot()
         else:
-            return (combat_log, 0)
+            return combat_log, 0
