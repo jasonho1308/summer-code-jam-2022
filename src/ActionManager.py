@@ -5,8 +5,9 @@ import bcrypt
 from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 
-from . import database, models
+from . import database
 from .fight import PVEFight, PVPFight
+from .models import Player
 from .skills.strike import Strike
 
 
@@ -68,7 +69,24 @@ class Sessions:
         result = self.fights[player_name].use_skill(skill)
 
         if result[1] != 0:
-            # TODO: Propagate updated player data back to database
+            player = result[1]
+            db = database.SessionLocal()
+            db.query(Player).filter(Player.name == player_name).update(
+                {
+                    "level": player.level,
+                    "experience": player.experience,
+                    "hp": player.hp,
+                    "max_hp": player.max_hp,
+                    "energy": player.energy,
+                    "strength": player.strength,
+                    "intellegence": player.intellegence,
+                    "stamina": player.stamina,
+                    "dexterity": player.dexterity,
+                    "charisma": player.charisma,
+                    "gold": player.gold,
+                }
+            )
+            db.commit()
             self.fights[player_name].pop()
         return result[0]
 
@@ -104,8 +122,8 @@ class ActionManager:
         db = database.SessionLocal()
         hashed = db.execute(
             select(
-                models.Player.hashed_password,
-            ).where(models.Player.name == data["name"])
+                Player.hashed_password,
+            ).where(Player.name == data["name"])
         )
         db.close()  # close the conn asap
         result = None
@@ -145,7 +163,7 @@ class ActionManager:
         db = database.SessionLocal()
         try:
             db.execute(
-                insert(models.Player).values(
+                insert(Player).values(
                     name=data["name"],
                     hashed_password=bcrypt.hashpw(
                         data["password"].encode("utf-8"), bcrypt.gensalt()
@@ -190,9 +208,7 @@ class ActionManager:
         """
         db = database.SessionLocal()
         player = db.execute(
-            models.Player.select().where(
-                models.Player.name == self.certed.id_name[client_id]
-            )
+            Player.select().where(Player.name == self.certed.id_name[client_id])
         ).fetchone()
         db.close()
         if self.sessions.is_fighting(player.name):
@@ -246,13 +262,13 @@ class ActionManager:
                 if time.time() <= pvp_inter.countdown[lobby]:
                     db = database.SessionLocal()
                     offender = db.execute(
-                        models.Player.select().where(
-                            models.Player.name == pvp_inter.offender_id[lobby]
+                        Player.select().where(
+                            Player.name == pvp_inter.offender_id[lobby]
                         )
                     ).fetchone()
                     defender = db.execute(
-                        models.Player.select().where(
-                            models.Player.name == pvp_inter.defender_id[lobby]
+                        Player.select().where(
+                            Player.name == pvp_inter.defender_id[lobby]
                         )
                     ).fetchone()
                     db.close()
