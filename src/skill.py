@@ -1,9 +1,13 @@
+import random
+
+
 class Skill:
     """Template class for skills"""
 
     name: str
     description: str
     energy_cost: int
+    chance: float
 
     # Requirements for players if we get around to players learning skills
     level: int
@@ -13,25 +17,34 @@ class Skill:
     dexterity: int
     charisma: int
 
-    @classmethod
-    def _use(cls, user, opponent):
-        """Implement effects on the user and opponent here"""
-        pass
+    @property
+    def name(self):
+        """The name of the skill"""
+        return self.__class__.__name__
 
-    @classmethod
-    def use(cls, user, opponent):
+    def _use(self, user, opponent):
+        """Skill implementation"""
+        if random.random() < self.chance:
+            damage = int(user.strength * (random.random() + 1))
+            opponent.hp -= damage
+            return f"{user.name!r} uses {self.name!r} for {damage} damage"
+        else:
+            return f"{user.name!r} tried to use {self.name!r} but missed!"
+
+    def use(self, user, opponent):
         """Decorator for _use, used for checking if skill usable"""
         if user.energy < self.energy_cost:
             return (
                 user,
                 opponent,
-                f"{user.name} doesn't have enough energy to cast {self.name}!",
+                f"{user.name!r} doesn't have enough energy to cast {self.name!r}!",
             )
         user.energy -= self.energy_cost
-        return cls._use(user, opponent)
+        return self._use(user, opponent)
 
     @classmethod
     def learnt(cls, player):
+        """Check if skill is learnt by user"""
         return (
             player.level >= cls.level
             and player.strength >= cls.strength
