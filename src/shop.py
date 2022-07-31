@@ -1,6 +1,6 @@
-from . import database
 import items
 
+from . import database
 
 shop = """\
 Welcome! We've these
