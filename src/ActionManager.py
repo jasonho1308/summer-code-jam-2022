@@ -342,6 +342,11 @@ class ActionManager:
             "attack": "xxx"
         }
         """
+        with database.SessionLocal() as db:
+            player = (
+                db.query(Player).filter_by(name=self.certed.id_name[client_id]).one()
+            )
+
         skill = skills.skills.get(
             data["attack"],
             await connection_manager.send_to_client(
@@ -349,7 +354,11 @@ class ActionManager:
                 websocket,
             ),
         )
-        # TODO: check skill requirements
+        if not skill.learnt(player):
+            await connection_manager.send_to_client(
+                "Skill not learnt",
+                websocket,
+            )
         if skill:
             self.sessions.attack(self.certed.id_name[client_id], skill, websocket)
 
