@@ -185,7 +185,7 @@ class ActionManager:
         result = None
         for row in hashed:
             result = row.hashed_password
-        if client_id in self.certed.id_name:
+        if client_id in self.certed.id_name.keys():
             await connection_manager.send_to_client("Already logged in", websocket)
             return
         if result is None:
@@ -358,6 +358,11 @@ class ActionManager:
             "skill": "xxx"
         }
         """
+        if "skill" not in data.keys():
+            await connection_manager.send_to_client(
+                "Please provide a skills", websocket
+            )
+            return
         if not self.sessions.is_fighting(self.certed.id_name[client_id]):
             await connection_manager.send_to_client(
                 "You aren't fighting anything", websocket,
