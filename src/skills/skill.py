@@ -48,9 +48,8 @@ class Skill:
         return (
             player.level >= cls.level
             and player.strength >= cls.strength
-            and player.intellegence >= cls.intelligence
+            and player.intelligence >= cls.intelligence
             and player.stamina >= cls.stamina
             and player.dexterity >= cls.dexterity
             and player.charisma >= cls.charisma
-            and player.gold >= cls.gold
         )
