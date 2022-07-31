@@ -360,7 +360,7 @@ class ActionManager:
         """
         if "skill" not in data.keys():
             await connection_manager.send_to_client(
-                "Please provide a skills", websocket
+                "Please provide a skill", websocket
             )
             return
         if not self.sessions.is_fighting(self.certed.id_name[client_id]):
