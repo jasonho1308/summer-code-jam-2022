@@ -1,3 +1,5 @@
+import json
+
 from src.models import Player
 
 from . import database
@@ -7,7 +9,7 @@ class Shop:
     """class for Shop"""
 
     def __init__(self) -> None:
-        self.item = {"energy_drink": 25, "health_potion": 25}
+        self.item = json.load(open("src/shop.json"))["item"]
 
     def buy_item(self, user_id: int, item: str):
         """Buy an item from the shop"""
