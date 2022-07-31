@@ -17,7 +17,7 @@ class Skill:
     charisma: int
 
     @property
-    def name(self):
+    def name(self) -> str:
         """The name of the skill"""
         return self.__class__.__name__
 
@@ -30,14 +30,14 @@ class Skill:
         else:
             return f"{user.name!r} tried to use {self.name!r} but missed!"
 
-    def use(self, user, opponent):
+    def use(self, user, opponent) -> str:
         """Decorator for _use, used for checking if skill usable"""
         if user.energy < self.energy_cost:
             return user, opponent, f"{user.name!r} doesn't have enough energy to cast {self.name!r}!"
         user.energy -= self.energy_cost
         return self._use(user, opponent)
 
-    def learnt(self, player):
+    def learnt(self, player) -> bool:
         """Check if skill is learnt by user"""
         return (
             player.level >= self.level

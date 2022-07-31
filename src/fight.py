@@ -22,7 +22,7 @@ class Player:
     is_offender: bool
     amount_of_skills_used: int
 
-    def __init__(self, database_row):
+    def __init__(self, database_row) -> None:
         """Populate player data from a database row"""
         self.name = database_row.name
         self.level = database_row.level

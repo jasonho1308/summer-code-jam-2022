@@ -32,7 +32,7 @@ class ConnectionManager:
         Sends message to all active connection
     """
 
-    def __init__(self, action_manager):
+    def __init__(self, action_manager) -> None:
         """
         Initalize the manager
 
@@ -41,7 +41,7 @@ class ConnectionManager:
         self.action_manager = action_manager
         self.active_connections: List[WebSocket] = []
 
-    async def connect(self, websocket: WebSocket):
+    async def connect(self, websocket: WebSocket) -> None:
         """
         Called when client connects to WebSocket
 
@@ -50,7 +50,7 @@ class ConnectionManager:
         await websocket.accept()
         self.active_connections.append(websocket)
 
-    def disconnect(self, websocket: WebSocket):
+    def disconnect(self, websocket: WebSocket) -> None:
         """
         Called when client disconnects
 
@@ -59,11 +59,11 @@ class ConnectionManager:
         self.active_connections.remove(websocket)
 
     @staticmethod
-    async def send_to_client(message: str, websocket: WebSocket):
+    async def send_to_client(message: str, websocket: WebSocket) -> None:
         """Sends message to the specified client"""
         await websocket.send_text(message)
 
-    async def broadcast(self, message: str):
+    async def broadcast(self, message: str) -> None:
         """Sends message to all logined connection"""
         for connection in self.action_manager.certed.name_ws.values():
             await connection.send_text(message)

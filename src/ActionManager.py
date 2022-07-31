@@ -49,13 +49,13 @@ class Sessions:
 
     fights = {}
 
-    def add_pve_fight(self, player):
+    def add_pve_fight(self, player) -> None:
         """Begin tracking a PVE fight"""
         if self.is_fighting(player.name):
             return
         self.fights[player.name] = PVEFight(player)
 
-    def add_pvp_fight(self, offender, defender):
+    def add_pvp_fight(self, offender, defender) -> None:
         """Begin tracking a PVP fight"""
         if self.is_fighting(offender.name):
             return
@@ -65,11 +65,11 @@ class Sessions:
         """Get current fight for player, if exists"""
         return self.fights.get(player.name)
 
-    def is_fighting(self, name):
+    def is_fighting(self, name) -> bool:
         """Check if a user is in a fight"""
         return name in self.fights
 
-    def get_status(self, name):
+    def get_status(self, name) -> str:
         """Get the status of both combatants"""
         fight = self.fights[name]
         # TODO: Case for PVP
@@ -79,7 +79,7 @@ class Sessions:
         output += f"\n{monster.name} - HP:{monster.hp}/{monster.max_hp} - Energy:{monster.energy}/{monster.max_energy}"
         return output
 
-    def attack(self, player_name, skill, websocket):
+    def attack(self, player_name, skill, websocket) -> str:
         """Run a turn of combat"""
         fight = self.fights[player_name]
         player = fight.player

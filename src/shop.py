@@ -11,7 +11,7 @@ class Shop:
     def __init__(self) -> None:
         self.item = json.load(open("src/shop.json"))["item"]
 
-    def buy_item(self, user_id: int, item: str):
+    def buy_item(self, user_id: int, item: str) -> str:
         """Buy an item from the shop"""
         with database.SessionLocal() as db:
             money = db.query(Player.gold).filter(database.Player.UUID == user_id)
@@ -45,7 +45,7 @@ class Shop:
             else:
                 return "Sorry, we don't have that item."
 
-    def display_shop(self):
+    def display_shop(self) -> str:
         """Display the shop"""
         result = "Welcome! We've these\n====================\n"
         for item in self.item:
