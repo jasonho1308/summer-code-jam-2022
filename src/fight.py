@@ -59,6 +59,8 @@ class Player:
 class PVPFight:
     """Handles Fight actions"""
 
+    fight_type = "PVP"
+
     def __init__(self, offender, defender) -> None:
         """Initalizes the fight"""
         self.offender = Player(offender)
@@ -114,6 +116,7 @@ class PVEFight:
 
     player: Player
     monster: Monster
+    fight_type = "PVE"
 
     def __init__(self, player) -> None:
         """Generate a new fight"""

@@ -1,5 +1,6 @@
 import time
 import uuid
+from typing import Optional
 
 import bcrypt
 from sqlalchemy import insert, select
@@ -59,6 +60,10 @@ class Sessions:
         if self.is_fighting(offender.name):
             return
         self.fights[offender.name] = PVPFight(offender, defender)
+
+    def get_fight(self, player) -> Optional[PVEFight | PVPFight]:
+        """Get current fight for player, if exists"""
+        return self.fights.get(player.name)
 
     def is_fighting(self, name):
         """Check if a user is in a fight"""
@@ -246,14 +251,24 @@ class ActionManager:
         """
         player = self.get_player_with_client_id(client_id)
 
-        if self.sessions.is_fighting(player.name):
-            await connection_manager.send_to_client(
-                "You are already in a fight!", websocket
-            )
+        if curr_fight := self.sessions.get_fight(player):
+            message = "You are already in a fight with "
+            if curr_fight.fight_type == "PVE":
+                message += f"a {curr_fight.monster.name}!"
+            elif curr_fight.fight_type == "PVP":
+                opponent = [
+                    user
+                    for user in (curr_fight.offender, curr_fight.defender)
+                    if user.name != player.name
+                ][0]
+                message += f"user {opponent.name}!"
+            await connection_manager.send_to_client(message, websocket)
         else:
-            self.sessions.add_pve_fight(player)
-            # TODO: make this more descriptive
-            await connection_manager.send_to_client("Now fighting!", websocket)
+            new_fight = PVEFight(player)
+            self.sessions.fights[player.name] = new_fight
+            await connection_manager.send_to_client(
+                f"You come accross a wild {new_fight.monster.name}...FIGHT!", websocket
+            )
 
     @login_required
     async def challenge_player(self, data, client_id, connection_manager, websocket):
