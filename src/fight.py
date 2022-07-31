@@ -120,12 +120,12 @@ class PVEFight:
         self.monster = catalog.select_level(player.level)
         self.player = Player(player)
 
-    def use_skill(self, skill: Skill) -> tuple[str, int | Player, dict]:
+    def use_skill(self, skill: Skill) -> tuple[str, int | dict]:
         """Run one round of combat
 
         str: combat log to send back to user
         int: combat result. -1 is player loss, 0 is combat continues,
-            if Player is returned it's the winner
+            if dict is returned, player has won
         dict: rewards for player win.
         """
         combat = skill.use(self.player, self.monster)
@@ -150,6 +150,6 @@ class PVEFight:
             )
             self.player.add_exp(10)
             self.player.gold += 100
-            return combat_log, self.player, self.monster.generate_loot()
+            return combat_log, self.monster.generate_loot()
         else:
             return combat_log, 0
