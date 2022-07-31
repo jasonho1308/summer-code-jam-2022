@@ -13,10 +13,12 @@ class Skill:
     dexterity: int
     charisma: int
 
+    @classmethod
     def _use(self, user, opponent):
         """Implement effects on the user and opponent here"""
         pass
 
+    @classmethod
     def use(self, user, opponent):
         """Decorator for _use, used for checking if skill usable"""
         if user.energy < self.energy_cost:

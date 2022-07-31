@@ -150,6 +150,6 @@ class PVEFight:
             )
             self.player.add_exp(10)
             self.player.gold += 100
-            return combat_log, self.monster.generate_loot()
+            return combat_log, self.monster.drop_loot()
         else:
             return combat_log, 0
