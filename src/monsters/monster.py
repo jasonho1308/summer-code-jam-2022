@@ -27,7 +27,8 @@ class Monster:
 
     def attack(self, player):
         """Select random monster skill"""
-        return random.choice(self.skills)(self, player)
+        # TODO: Add energy cost check if monster has skill that costs energy
+        return random.choice(self.skills).use(self, player)
 
     def drop_loot(self) -> dict:
         """Generate loot"""
