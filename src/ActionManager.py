@@ -405,7 +405,14 @@ class ActionManager:
 
     @login_required
     async def list_skills(self, data, client_id, connection_manager, websocket):
-        """List the player's current list of learned skills"""
+        """
+        List the player's current list of learned skills
+
+        JSON Structure:
+        {
+            "action": "list_skills"
+        }
+        """
         player = self.get_player_with_client_id(client_id)
         learned_skills = [repr(skill.name) for skill in skills.values() if skill.learnt(player)]
         await connection_manager.send_to_client(
