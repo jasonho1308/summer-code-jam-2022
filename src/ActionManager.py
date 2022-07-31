@@ -5,10 +5,9 @@ import bcrypt
 from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 
-from . import database
+from . import database, skills
 from .fight import PVEFight, PVPFight
 from .models import Player
-from .skills.strike import Strike
 
 
 def login_required(func):
@@ -71,7 +70,7 @@ class Sessions:
         result = fight.use_skill(skill)
 
         if result[1] != 0:
-            if len(result) == 2:
+            if isinstance(fight, PVEFight):
                 with database.SessionLocal() as db:
                     db.query(Player).filter(Player.name == player_name).update(
                         {
@@ -89,8 +88,8 @@ class Sessions:
                         }
                     )
             else:
-                defender = result[2]
-                offender = result[3]
+                defender = fight.defender
+                offender = fight.offender
                 with database.SessionLocal() as db:
                     db.query(Player).filter(Player.name == defender.name).update(
                         {
@@ -341,9 +340,16 @@ class ActionManager:
             "attack": "xxx"
         }
         """
-        # For now, the only attack the player knows is strike.
-        # TODO: Add skill picking
-        self.sessions.attack(self.certed.id_name[client_id], Strike, websocket)
+        skill = skills.skills.get(
+            data["attack"],
+            await connection_manager.send_to_client(
+                "Skill doesn't exist",
+                websocket,
+            )
+        )
+        # TODO: check skill requirements
+        if skill:
+            self.sessions.attack(self.certed.id_name[client_id], skill, websocket)
 
     @login_required
     async def view_shop(self, data, client_id, connection_manager, websocket):

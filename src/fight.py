@@ -90,11 +90,11 @@ class PVPFight:
         elif self.offender.hp <= 0:
             combat_log += f"\n{self.offender.name} has fallen."
             self.offender.gold += self.gold_amount_got(self.offender)
-            return combat_log, 2, self.defender, self.offender
+            return combat_log, 2
         elif self.defender.hp <= 0:
             combat_log += f"\n{self.defender.name} has fallen"
             self.offender.gold += self.gold_amount_got(self.offender)
-            return combat_log, 1, self.defender, self.offender
+            return combat_log, 1
         else:
             return combat_log, 0
 
@@ -128,15 +128,9 @@ class PVEFight:
             if dict is returned, player has won
         dict: rewards for player win.
         """
-        combat = skill.use(self.player, self.monster)
-        self.player = combat[0]
-        self.monster = combat[1]  # to update
-        combat_log = combat[2]
+        combat_log = skill.use(self.player, self.monster)
         if self.player.hp > 0 and self.monster.hp > 0:
-            monster_cast = self.monster.attack(self.player)
-            self.player = combat[1]
-            self.monster = combat[0]
-            combat_log += "\n" + monster_cast[2]
+            combat_log += "\n" + self.monster.attack(self.player)
 
         if self.player.hp <= 0 and self.monster.hp <= 0:
             combat_log += "\nBoth combatants have fallen."

@@ -47,4 +47,4 @@ class MonsterCatalog:
 
     def select_level(self, level):
         """Pick a random level appropriate monster"""
-        return random.choice(self.catalog[level])
+        return random.choice(self.catalog[level])()
