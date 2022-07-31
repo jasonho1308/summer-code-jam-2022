@@ -69,7 +69,7 @@ class PVPFight:
         self, caster: Player, castee: Player, skill: Skill
     ) -> tuple[str, int]:
         """Called when skill used
-        
+
         str: combat log to send back to user
         int: combat result
             -1 = both loses
@@ -122,7 +122,7 @@ class PVEFight:
 
     def use_skill(self, skill: Skill) -> tuple[str, int | Player, dict]:
         """Run one round of combat
-        
+
         str: combat log to send back to user
         int: combat result. -1 is player loss, 0 is combat continues,
             if Player is returned it's the winner
