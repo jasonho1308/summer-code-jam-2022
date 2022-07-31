@@ -36,6 +36,7 @@ class Player:
         self.stamina = database_row.stamina
         self.dexterity = database_row.dexterity
         self.charisma = database_row.charisma
+        self.gold = database_row.gold
 
         self.is_offender = False
         self.amount_of_skills_used = 0
