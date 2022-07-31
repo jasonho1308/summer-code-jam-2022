@@ -119,13 +119,12 @@ class ActionManager:
             "password": "xxx"
         }
         """
-        db = database.SessionLocal()
-        hashed = db.execute(
-            select(
-                Player.hashed_password,
-            ).where(Player.name == data["name"])
-        )
-        db.close()  # close the conn asap
+        with database.SessionLocal() as db:
+            hashed = db.execute(
+                select(
+                    Player.hashed_password,
+                ).where(Player.name == data["name"])
+            )
         result = None
         for row in hashed:
             result = row.hashed_password
@@ -160,23 +159,22 @@ class ActionManager:
                 "You are already logged in", websocket
             )
             return
-        db = database.SessionLocal()
-        try:
-            db.execute(
-                insert(Player).values(
-                    name=data["name"],
-                    hashed_password=bcrypt.hashpw(
-                        data["password"].encode("utf-8"), bcrypt.gensalt()
-                    ).decode("utf-8"),
+        with database.SessionLocal() as db:
+            try:
+                db.execute(
+                    insert(Player).values(
+                        name=data["name"],
+                        hashed_password=bcrypt.hashpw(
+                            data["password"].encode("utf-8"), bcrypt.gensalt()
+                        ).decode("utf-8"),
+                    )
                 )
-            )
-            db.commit()
-            db.close()  # close the conn asap
-        except IntegrityError:
-            await connection_manager.send_to_client(
-                f"Username \"{data['name']}\" taken", websocket
-            )
-            return
+                db.commit()
+            except IntegrityError:
+                await connection_manager.send_to_client(
+                    f"Username \"{data['name']}\" taken", websocket
+                )
+                return
         self.certed.add(client_id, data["name"], websocket)
         await connection_manager.send_to_client(
             f"New account created, welcome, {data['name']}!", websocket
@@ -206,9 +204,10 @@ class ActionManager:
             "action": "go_hunting"
         }
         """
-        db = database.SessionLocal()
-        player = db.query(Player).filter_by(name=self.certed.id_name[client_id]).one()
-        db.close()
+        with database.SessionLocal() as db:
+            player = (
+                db.query(Player).filter_by(name=self.certed.id_name[client_id]).one()
+            )
 
         if self.sessions.is_fighting(player.name):
             await connection_manager.send_to_client(
@@ -259,10 +258,17 @@ class ActionManager:
         if lobby in pvp_inter.lobby:
             if client_id == pvp_inter.defender_id[lobby]:
                 if time.time() <= pvp_inter.countdown[lobby]:
-                    db = database.SessionLocal()
-                    offender = db.query(Player).filter_by(name=pvp_inter.offender_id[lobby]).one()
-                    defender = db.query(Player).filter_by(name=pvp_inter.defender_id[lobby]).one()
-                    db.close()
+                    with database.SessionLocal() as db:
+                        offender = (
+                            db.query(Player)
+                            .filter_by(name=pvp_inter.offender_id[lobby])
+                            .one()
+                        )
+                        defender = (
+                            db.query(Player)
+                            .filter_by(name=pvp_inter.defender_id[lobby])
+                            .one()
+                        )
                     if self.sessions.is_fighting(defender.name):
                         await connection_manager.send_to_client(
                             "You are already in a fight!", websocket
