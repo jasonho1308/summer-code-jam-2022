@@ -236,7 +236,8 @@ class ActionManager:
                 return
         self.certed.add(client_id, data["name"], websocket)
         await connection_manager.send_to_client(
-            f"New account created, welcome, {data['name']}!", websocket
+            f"""New account created.
+            Welcome to the land of apis, {data['name']}! Adventure awaits, what kind of hero will you be?""", websocket
         )
 
     @login_required
