@@ -1,5 +1,11 @@
 # flake8: noqa
-from . import monsters
 from .monster import Monster, MonsterCatalog
+from .monsters import *
 
-all_monsters = [monsters.Goldfish, monsters.Quokka]
+monsters = [
+    Goldfish,
+    Rat,
+    Quokka,
+    Bandit,
+    Goblin,
+]
