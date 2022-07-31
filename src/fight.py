@@ -47,15 +47,13 @@ class Player:
         while self.level * 100 <= self.experience:
             self.experience -= self.level * 100
             self.level += 1
-            self.max_hp += 1
-            self.energy += 1
-            self.max_energy += 1
+            self.max_hp += 5
+            self.max_energy += 2
             self.strength += 1
             self.intelligence += 1
             self.stamina += 1
             self.dexterity += 1
             self.charisma += 1
-            self.gold += 500
 
 
 class PVPFight:
