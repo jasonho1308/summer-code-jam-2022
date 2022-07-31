@@ -1,6 +1,6 @@
 from . import heal, strike
 
-__all__ = {
+skills = {
     "heal": heal.Heal,
     "strike": strike.Strike,
 }
