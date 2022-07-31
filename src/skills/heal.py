@@ -6,6 +6,7 @@ from ..skill import Skill
 class Heal(Skill):
     """Heals caster by 0.5HP * intellegence"""
 
+    @classmethod
     def _use(self, caster, castee):
         """Skill implementation"""
         effectiveness = random.random()

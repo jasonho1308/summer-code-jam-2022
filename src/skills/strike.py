@@ -18,6 +18,7 @@ class Strike(Skill):
     dexterity = 1
     charisma = 1
 
+    @classmethod
     def _use(self, user, opponent):
         """Skill implementation"""
         damage = int(user.strength * (random.random() + 1))
