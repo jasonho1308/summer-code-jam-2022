@@ -125,7 +125,7 @@ class Sessions:
                             "gold": offender.gold,
                         }
                     )
-            self.fights[player_name].pop()
+            self.fights.pop(player_name)
         return result[0]
 
 
