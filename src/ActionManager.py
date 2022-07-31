@@ -67,6 +67,8 @@ class Sessions:
 
 
 class PVPIntermission:
+    """PVP tracking"""
+
     lobby = []
     client_id = {}
     countdown = {}

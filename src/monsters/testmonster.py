@@ -1,8 +1,8 @@
-from ..skills.strike import Strike
-from ..monster import Monster
+from .monster import Monster
+from .skills.strike import Strike
 
 
-class TestMonster:
+class TestMonster(Monster):
     """Testing whether stuff works"""
 
     name = "TestMonster v0.0.1"
@@ -16,5 +16,5 @@ class TestMonster:
     stamina: 0
     dexterity: 0
     charisma: 0
-    
+
     skills = [Strike]

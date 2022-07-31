@@ -1,8 +1,7 @@
 from collections import defaultdict
 from random import choice
 
-import monsters
-
+from . import monsters
 from .skill import Skill
 
 
