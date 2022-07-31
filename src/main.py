@@ -41,6 +41,9 @@ async def websocket_endpoint(websocket: WebSocket):
                 await connection_manager.send_to_client(
                     "Invalid action specified", websocket
                 )
+                await connection_manager.send_to_client(
+                    traceback.format_exc(), websocket
+                )
             except KeyError as e:
                 await connection_manager.send_to_client(
                     f"Invalid data, did you mean '{e}'?", websocket
