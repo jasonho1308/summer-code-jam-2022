@@ -521,7 +521,7 @@ class ActionManager:
 
         JSON Structure:
         {
-            "action": "status"
+            "action": "view_status"
         }
         """
         player = self.get_player_with_client_id(client_id)
@@ -542,7 +542,7 @@ class ActionManager:
 
         JSON Structure:
         {
-            "action": "status"
+            "action": "view_status_full"
         }
         """
         player = self.get_player_with_client_id(client_id)
