@@ -1,5 +1,7 @@
-class HealthPotion:
-    """Template class for items"""
+from .item import Item
+
+class HealthPotion(Item):
+    """Heals player for 50 HP"""
 
     item_type_id = 1
     name = "health_potion"
