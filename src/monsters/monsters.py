@@ -66,6 +66,7 @@ class Bandit(Monster):
     stamina = 0
     dexterity = 0
     charisma = 0
+    gold = 20
 
     skills = [skills["strike"]]
 
@@ -83,5 +84,6 @@ class Goblin(Monster):
     stamina = 0
     dexterity = 0
     charisma = 0
+    gold = 10
 
     skills = [skills["bite"], skills["strike"]]

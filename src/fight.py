@@ -140,11 +140,15 @@ class PVEFight:
             combat_log += "\nYou have fallen."
             return combat_log, -1
         elif self.monster.hp <= 0:
-            combat_log += (
-                f"\nYou have defeated {self.monster.name}.\n+10 EXP\n+100 Gold"
-            )
-            self.player.add_exp(10)
-            self.player.gold += 100
-            return combat_log, self.monster.drop_loot()
+            loot = self.monster.drop_loot()
+            combat_log += f"\nYou have defeated {self.monster.name}.\n+{loot['xp']} EXP"
+            if "gold" in loot:
+                combat_log += f"\n+{loot['gold']} Gold"
+                self.player.gold += loot["gold"]
+            if "items" in loot:
+                for i in loot["items"]:
+                    combat_log += f"\nGained {i.name}"
+            self.player.experience += loot["xp"]
+            return combat_log, loot
         else:
             return combat_log, 0
