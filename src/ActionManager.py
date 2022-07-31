@@ -341,13 +341,12 @@ class ActionManager:
         """
         player = self.get_player_with_client_id(client_id)
 
-        found_skill = skills.get(data["attack"].casefold())
-        if found_skill is None:
+        skill = skills.get(data["attack"].casefold())
+        if skill is None:
             await connection_manager.send_to_client(
                 "Skill doesn't exist", websocket,
             )
             return
-        skill = found_skill()
         if not skill.learnt(player):
             await connection_manager.send_to_client(
                 "Skill not learnt", websocket,
