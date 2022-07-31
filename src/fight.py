@@ -58,6 +58,7 @@ class PVPFight:
         int: winner's prize
         """
         cast = skill.use(caster, castee)
+        combat_log = cast[2]
         if caster.is_offender:
             self.offender = cast[0]  # caster
             self.defender = cast[1]  # castee
@@ -68,10 +69,10 @@ class PVPFight:
             combat_log += "\nBoth combatants have fallen."
             return (combat_log, -1)
         elif self.offender.hp <= 0:
-            combat_log += f"\n{offender.name} has fallen."
+            combat_log += f"\n{self.offender.name} has fallen."
             return (combat_log, 2, self.gold_amount_got())
         elif self.defender.hp <= 0:
-            combat_log += f"\n{defender.name} has fallen"
+            combat_log += f"\n{self.defender.name} has fallen"
             return (combat_log, 1, self.gold_amount_got())
         else:
             return (combat_log, 0)
