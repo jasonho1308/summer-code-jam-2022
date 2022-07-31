@@ -69,24 +69,57 @@ class Sessions:
         result = self.fights[player_name].use_skill(skill)
 
         if result[1] != 0:
-            player = result[1]
-            db = database.SessionLocal()
-            db.query(Player).filter(Player.name == player_name).update(
-                {
-                    "level": player.level,
-                    "experience": player.experience,
-                    "hp": player.hp,
-                    "max_hp": player.max_hp,
-                    "energy": player.energy,
-                    "strength": player.strength,
-                    "intellegence": player.intellegence,
-                    "stamina": player.stamina,
-                    "dexterity": player.dexterity,
-                    "charisma": player.charisma,
-                    "gold": player.gold,
-                }
-            )
-            db.commit()
+            if len(result) == 2:
+                with database.SessionLocal() as db:
+                    db.query(Player).filter(Player.name == player_name).update(
+                        {
+                            "level": player.level,
+                            "experience": player.experience,
+                            "hp": player.hp,
+                            "max_hp": player.max_hp,
+                            "energy": player.energy,
+                            "strength": player.strength,
+                            "intellegence": player.intellegence,
+                            "stamina": player.stamina,
+                            "dexterity": player.dexterity,
+                            "charisma": player.charisma,
+                            "gold": player.gold,
+                        }
+                    )
+            else:
+                defender = result[2]
+                offender = result[3]
+                with database.SessionLocal() as db:
+                    db.query(Player).filter(Player.name == defender.name).update(
+                        {
+                            "level": defender.level,
+                            "experience": defender.experience,
+                            "hp": defender.hp,
+                            "max_hp": defender.max_hp,
+                            "energy": defender.energy,
+                            "strength": defender.strength,
+                            "intellegence": defender.intellegence,
+                            "stamina": defender.stamina,
+                            "dexterity": defender.dexterity,
+                            "charisma": defender.charisma,
+                            "gold": defender.gold,
+                        }
+                    )
+                    db.query(Player).filter(Player.name == offender.name).update(
+                        {
+                            "level": offender.level,
+                            "experience": offender.experience,
+                            "hp": offender.hp,
+                            "max_hp": offender.max_hp,
+                            "energy": offender.energy,
+                            "strength": offender.strength,
+                            "intellegence": offender.intellegence,
+                            "stamina": offender.stamina,
+                            "dexterity": offender.dexterity,
+                            "charisma": offender.charisma,
+                            "gold": offender.gold,
+                        }
+                    )
             self.fights[player_name].pop()
         return result[0]
 
