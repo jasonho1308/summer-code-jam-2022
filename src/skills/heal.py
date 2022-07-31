@@ -15,20 +15,20 @@ class Heal(Skill):
 
         effectiveness = random.random()
         if effectiveness < 0.3:
-            if caster.maxhp - caster.hp > 0.2 * caster.intellegence:
+            if caster.maxhp - caster.hp > 0.2 * caster.intelligence:
                 caster.hp = caster.maxhp
             else:
-                caster.hp += int(0.1 * caster.intellegence)
-            return f"{caster.name}'s heal is not so effective"
+                caster.hp += int(0.1 * caster.intelligence)
+            return f"{caster.name!r} healed themself for {0.1 * caster.intelligence} HP!"
         elif 0.3 < effectiveness < 0.9:
-            if caster.maxhp - caster.hp > 0.5 * caster.intellegence:
+            if caster.maxhp - caster.hp > 0.5 * caster.intelligence:
                 caster.hp = caster.maxhp
             else:
-                caster.hp += int(0.5 * caster.intellegence)
-            return f"{caster.name}'s heal is effective"
+                caster.hp += int(0.5 * caster.intelligence)
+            return f"{caster.name!r} healed themself for {0.5 * caster.intelligence} HP!"
         else:
-            if caster.maxhp - caster.hp > caster.intellegence:
+            if caster.maxhp - caster.hp > caster.intelligence:
                 caster.hp = caster.maxhp
             else:
-                caster.hp += caster.intellegence
-            return f"{caster.name}'s heal is super effective!"
+                caster.hp += caster.intelligence
+            return f"{caster.name!r} healed themself for {caster.intelligence} HP!"
