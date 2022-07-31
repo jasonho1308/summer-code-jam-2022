@@ -1,7 +1,7 @@
 import random
 from collections import defaultdict
 
-from ..skill import Skill
+from ..skills.skill import Skill
 
 
 class Monster:

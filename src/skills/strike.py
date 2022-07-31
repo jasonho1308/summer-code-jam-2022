@@ -1,6 +1,4 @@
-import random
-
-from ..skill import Skill
+from .skill import Skill
 
 
 class Strike(Skill):
@@ -8,6 +6,7 @@ class Strike(Skill):
 
     description = "A regular hit"
     energy_cost = 0
+    chance = 0.8
 
     # Requirements for players if we get around to players learning skills
     level = 1
@@ -16,10 +15,3 @@ class Strike(Skill):
     stamina = 1
     dexterity = 1
     charisma = 1
-
-    @staticmethod
-    def _use(user, opponent):
-        """Skill implementation"""
-        damage = int(user.strength * (random.random() + 1))
-        opponent.hp -= damage
-        return f"{user.name} strikes for {damage} damage"

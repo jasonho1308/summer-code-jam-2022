@@ -1,5 +1,5 @@
 from .monsters import Monster, MonsterCatalog
-from .skill import Skill
+from .skills.skill import Skill
 
 
 class Player:

@@ -22,7 +22,7 @@ class Skill:
         """The name of the skill"""
         return self.__class__.__name__
 
-    def _use(self, user, opponent):
+    def _use(self, user, opponent) -> str:
         """Skill implementation"""
         if random.random() < self.chance:
             damage = int(user.strength * (random.random() + 1))
