@@ -260,16 +260,8 @@ class ActionManager:
             if client_id == pvp_inter.defender_id[lobby]:
                 if time.time() <= pvp_inter.countdown[lobby]:
                     db = database.SessionLocal()
-                    offender = db.execute(
-                        Player.select().where(
-                            Player.name == pvp_inter.offender_id[lobby]
-                        )
-                    ).fetchone()
-                    defender = db.execute(
-                        Player.select().where(
-                            Player.name == pvp_inter.defender_id[lobby]
-                        )
-                    ).fetchone()
+                    offender = db.query(Player).filter_by(name=pvp_inter.offender_id[lobby]).one()
+                    defender = db.query(Player).filter_by(name=pvp_inter.defender_id[lobby]).one()
                     db.close()
                     if self.sessions.is_fighting(defender.name):
                         await connection_manager.send_to_client(
