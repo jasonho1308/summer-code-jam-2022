@@ -71,7 +71,7 @@ class Sessions:
         result = fight.use_skill(skill)
 
         if result[1] != 0:
-            if len(result) == 2:
+            if isinstance(fight, PVEFight):
                 with database.SessionLocal() as db:
                     db.query(Player).filter(Player.name == player_name).update(
                         {
@@ -89,8 +89,8 @@ class Sessions:
                         }
                     )
             else:
-                defender = result[2]
-                offender = result[3]
+                defender = fight.defender
+                offender = fight.offender
                 with database.SessionLocal() as db:
                     db.query(Player).filter(Player.name == defender.name).update(
                         {
