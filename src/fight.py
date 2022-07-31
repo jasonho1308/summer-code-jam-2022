@@ -47,7 +47,16 @@ class PVPFight:
         self.defender = Player(defender)
 
     def use_skill(self, caster: Player, castee: Player, skill: Skill) -> str:
-        """Called when one uses skill"""
+        """Called when skill used
+
+        str: combat log to send back to user
+        int: combat result
+            -1 = both loses
+            0  = continue
+            1  = offender wins
+            2  = defender wins
+        int: winner's prize
+        """
         cast = skill.use(caster, castee)
         if caster.is_offender:
             self.offender = cast[0]  # caster
@@ -55,7 +64,17 @@ class PVPFight:
         else:
             self.offender = cast[1]  # castee
             self.defender = cast[0]  # caster
-        return cast[3]  # whether the skill was effective or not
+        if self.defender.hp <= 0 and self.offender.hp <= 0:
+            combat_log += "\nBoth combatants have fallen."
+            return (combat_log, -1)
+        elif self.offender.hp <= 0:
+            combat_log += f"\n{offender.name} has fallen."
+            return (combat_log, 2, self.gold_amount_got())
+        elif self.defender.hp <= 0:
+            combat_log += f"\n{defender.name} has fallen"
+            return (combat_log, 1, self.gold_amount_got())
+        else:
+            return (combat_log, 0)
 
     def gold_amount_got(self, winner: Player) -> int:
         """Calculate the gold obtained when one wins"""
@@ -85,9 +104,15 @@ class PVEFight:
         str: combat log to send back to user
         int: combat result. -1 is player loss, 0 is combat continues, dict return value is rewards for player win.
         """
-        combat_log = skill.use(self.player, self.monster)
+        combat = skill.use(self.player, self.monster)
+        self.player = combat[0]
+        self.monster = combat[1]  # to update
+        combat_log = combat[2]
         if self.player.hp > 0 and self.monster.hp > 0:
-            combat_log += "\n" + self.monster.attack(self.player)
+            monster_cast = self.monster.attack(self.player)
+            self.player = combat[1]
+            self.monster = combat[0]
+            combat_log += "\n" + monster_cast[2]
 
         if self.player.hp <= 0 and self.monster.hp <= 0:
             combat_log += "\nBoth combatants have fallen."
