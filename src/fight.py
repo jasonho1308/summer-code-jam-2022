@@ -128,15 +128,9 @@ class PVEFight:
             if dict is returned, player has won
         dict: rewards for player win.
         """
-        combat = skill.use(self.player, self.monster)
-        self.player = combat[0]
-        self.monster = combat[1]  # to update
-        combat_log = combat[2]
+        combat_log = skill.use(self.player, self.monster)
         if self.player.hp > 0 and self.monster.hp > 0:
-            monster_cast = self.monster.attack(self.player)
-            self.player = combat[1]
-            self.monster = combat[0]
-            combat_log += "\n" + monster_cast[2]
+            combat_log += "\n" + self.monster.attack(self.player)
 
         if self.player.hp <= 0 and self.monster.hp <= 0:
             combat_log += "\nBoth combatants have fallen."
