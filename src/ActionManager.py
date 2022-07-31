@@ -185,6 +185,9 @@ class ActionManager:
         result = None
         for row in hashed:
             result = row.hashed_password
+        if client_id in self.certed.id_name:
+            await connection_manager.send_to_client("Already logged in", websocket)
+            return
         if result is None:
             await connection_manager.send_to_client(
                 f"No account with username {data['name']} found", websocket
