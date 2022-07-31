@@ -339,6 +339,11 @@ class ActionManager:
             "attack": "xxx"
         }
         """
+        if not self.sessions.is_fighting(self.certed.id_name[client_id]):
+            await connection_manager.send_to_client(
+                "You aren't fighting anything", websocket,
+            )
+            return
         player = self.get_player_with_client_id(client_id)
 
         skill = skills.get(data["attack"].casefold())
