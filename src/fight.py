@@ -145,7 +145,7 @@ class PVEFight:
             if "gold" in loot:
                 combat_log += f"\n+{loot['gold']} Gold"
             if "items" in loot:
-                for i in items:
+                for i in loot["items"]:
                     combat_log += f"\nGained {i.name}"
             self.player.loot['xp']
             self.player.gold += loot['gold']
