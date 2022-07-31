@@ -8,10 +8,9 @@ class Heal(Skill):
 
     chance = 0.85
 
-    @classmethod
-    def _use(cls, caster, castee) -> str:
+    def _use(self, caster, castee) -> str:
         """Skill implementation"""
-        if random.random() > cls.chance:
+        if random.random() > self.chance:
             return f"{caster.name} tried to heal, but failed miserably"
 
         effectiveness = random.random()
