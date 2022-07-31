@@ -207,9 +207,7 @@ class ActionManager:
         }
         """
         db = database.SessionLocal()
-        player = (
-            db.query(models.Player).filter_by(name=self.certed.id_name[client_id]).one()
-        )
+        player = db.query(Player).filter_by(name=self.certed.id_name[client_id]).one()
         db.close()
 
         if self.sessions.is_fighting(player.name):
