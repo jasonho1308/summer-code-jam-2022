@@ -8,7 +8,6 @@ from ..skills.skill import Skill
 class Monster:
     """Template class for monsters"""
 
-    name: str
     level: int
     hp: int
     max_hp: int
@@ -49,10 +48,10 @@ class MonsterCatalog:
 
     def __init__(self):
         """Organise monsters by level"""
-        from . import all_monsters
+        from . import monsters
 
         self.catalog = defaultdict(list)
-        for monster in all_monsters:
+        for monster in monsters:
             self.catalog[monster.level].append(monster)
 
     def select_monster_of_level(self, level):
