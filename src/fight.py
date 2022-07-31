@@ -26,6 +26,7 @@ class Player:
         """Populate player data from a database row"""
         self.name = database_row.name
         self.level = database_row.level
+        self.experience = database_row.experience
         self.hp = database_row.hp
         self.max_hp = database_row.max_hp
         self.energy = database_row.energy
