@@ -248,9 +248,9 @@ class ActionManager:
 
         if curr_fight := self.sessions.get_fight(player):
             message = "You are already in a fight with "
-            if curr_fight.fight_type == "PVE":
+            if isinstance(curr_fight, PVEFight):
                 message += f"a {curr_fight.monster.name}!"
-            elif curr_fight.fight_type == "PVP":
+            elif isinstance(curr_fight, PVPFight):
                 opponent = [user for user in (curr_fight.offender, curr_fight.defender)
                             if user.name != player.name][0]
                 message += f"user {opponent.name}!"
