@@ -5,9 +5,10 @@ import bcrypt
 from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 
-from . import database, skills
+from . import database
 from .fight import PVEFight, PVPFight
 from .models import Player
+from .skills import skills
 
 
 def login_required(func):
@@ -342,12 +343,9 @@ class ActionManager:
             "attack": "xxx"
         }
         """
-        with database.SessionLocal() as db:
-            player = (
-                db.query(Player).filter_by(name=self.certed.id_name[client_id]).one()
-            )
+        player = self.get_player_with_client_id(client_id)
 
-        skill = skills.skills.get(
+        skill = skills.get(
             data["attack"],
             await connection_manager.send_to_client(
                 "Skill doesn't exist",
