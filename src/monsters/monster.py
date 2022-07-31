@@ -20,6 +20,11 @@ class Monster:
     charisma: int
     skills: list[Skill]
 
+    @property
+    def name(self):
+        """The name of the monster's type"""
+        return self.__class__.__name__
+
     def attack(self, player):
         """Select random monster skill"""
         return random.choice(self.skills)(self, player)

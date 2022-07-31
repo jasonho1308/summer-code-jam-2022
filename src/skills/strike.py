@@ -6,7 +6,6 @@ from ..skill import Skill
 class Strike(Skill):
     """Does nominal damage based on user's strength"""
 
-    name = "Strike"
     description = "A regular hit"
     energy_cost = 0
 
@@ -18,8 +17,8 @@ class Strike(Skill):
     dexterity = 1
     charisma = 1
 
-    @classmethod
-    def _use(self, user, opponent):
+    @staticmethod
+    def _use(user, opponent):
         """Skill implementation"""
         damage = int(user.strength * (random.random() + 1))
         opponent.hp -= damage
