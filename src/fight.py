@@ -144,11 +144,11 @@ class PVEFight:
             combat_log += f"\nYou have defeated {self.monster.name}.\n+{loot['xp']} EXP"
             if "gold" in loot:
                 combat_log += f"\n+{loot['gold']} Gold"
+                self.player.gold += loot["gold"]
             if "items" in loot:
                 for i in loot["items"]:
                     combat_log += f"\nGained {i.name}"
             self.player.experience += loot["xp"]
-            self.player.gold += loot["gold"]
             return combat_log, loot
         else:
             return combat_log, 0

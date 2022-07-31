@@ -83,6 +83,7 @@ class Sessions:
                             "hp": player.hp,
                             "max_hp": player.max_hp,
                             "energy": player.energy,
+                            "max_energy": player.max_energy,
                             "strength": player.strength,
                             "intelligence": player.intelligence,
                             "stamina": player.stamina,
