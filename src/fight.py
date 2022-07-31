@@ -41,9 +41,10 @@ class Player:
         self.is_offender = False
         self.amount_of_skills_used = 0
 
-    def add_exp(self, amount: int):
+    def add_exp(self, amount: int) -> bool:
         """Adds exp to player, if reached maximum then level up"""
         self.experience += amount
+        levelled = False
         while self.level * 100 <= self.experience:
             self.experience -= self.level * 100
             self.level += 1
@@ -56,6 +57,8 @@ class Player:
             self.stamina += 1
             self.dexterity += 1
             self.charisma += 1
+            levelled = True
+        return levelled
 
 
 class PVPFight:
@@ -156,7 +159,9 @@ class PVEFight:
             if "items" in loot:
                 for i in loot["items"]:
                     combat_log += f"\nGained {i.name}"
-            self.player.add_exp(loot["xp"])
+            levelled = self.player.add_exp(loot["xp"])
+            if levelled:
+                combat_log += f"\nLevelled up! You are now level {self.player.level}."
             return combat_log, loot
         else:
             return combat_log, 0
