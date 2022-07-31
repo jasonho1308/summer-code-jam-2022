@@ -1,4 +1,5 @@
 from json import JSONDecodeError
+import uuid
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
@@ -23,9 +24,10 @@ async def healthcheck():
     return "Service is healthy"
 
 
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: str):
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
     """Starts WebSocket when /ws/{some random UUID} accessed"""
+    client_id = uuid.uuid4()
     await connection_manager.connect(websocket)
     try:
         while True:
