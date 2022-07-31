@@ -1,5 +1,6 @@
 from .item import Item
 
+
 class HealthPotion(Item):
     """Heals player for 50 HP"""
 
