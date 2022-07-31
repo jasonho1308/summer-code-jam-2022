@@ -346,7 +346,7 @@ class ActionManager:
         player = self.get_player_with_client_id(client_id)
 
         skill = skills.get(
-            data["attack"],
+            data["attack"].casefold(),
             await connection_manager.send_to_client(
                 "Skill doesn't exist",
                 websocket,
