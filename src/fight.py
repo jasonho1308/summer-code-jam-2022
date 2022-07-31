@@ -22,7 +22,20 @@ class Player:
 
     def __init__(self, database_row):
         """Populate player data from a database row"""
-        pass
+        self.name = database_row.name
+        self.level = database_row.level
+        self.hp = database_row.hp
+        self.max_hp = database_row.max_hp
+        self.energy = database_row.energy
+        self.max_energy = database_row.max_energy
+        self.strength = database_row.strength
+        self.intelligence = database_row.intelligence
+        self.stamina = database_row.stamina
+        self.dexterity = database_row.dexterity
+        self.charisma = database_row.charisma
+
+        self.is_offender = False
+        self.amount_of_skills_used = 0
 
 
 class Fight:
@@ -64,7 +77,7 @@ class PVEFight:
     def __init__(self, player) -> None:
         """Generate a new fight"""
         self.monster = catalog.select_level(player.level)
-        self.player = player
+        self.player = Player(player)
 
     def use_skill(self, skill: Skill) -> tuple[str, int | dict]:
         """Run one round of combat

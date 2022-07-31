@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from . import database, models
 from .fight import PVEFight
+from .skills.strike import Strike
 
 
 def login_required(func):
@@ -79,6 +80,7 @@ class ActionManager:
 
     certed = Certificated()
     pvp_intermission = PVPIntermission()
+    sessions = Sessions()
 
     async def login(self, data, client_id, connection_manager, websocket):
         """
@@ -178,7 +180,20 @@ class ActionManager:
             "action": "go_hunting"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        db = database.SessionLocal()
+        player = db.execute(
+            models.Player.select().where(
+                models.Player.name == self.certed.id_name[client_id]
+            )
+        ).fetchone()
+        if self.sessions.is_fighting(player.name):
+            await connection_manager.send_to_client(
+                "You are already in a fight!", websocket
+            )
+        else:
+            self.sessions.add_pve_fight(player)
+            # TODO: make this more descriptive
+            await connection_manager.send_to_client("Now fighting!", websocket)
 
     @login_required
     async def challenge_player(self, data, client_id, connection_manager, websocket):
@@ -249,7 +264,9 @@ class ActionManager:
             "attack": "xxx"
         }
         """
-        await connection_manager.send_to_client("Not yet implemented", websocket)
+        # For now, the only attack the player knows is strike.
+        # TODO: Add skill picking
+        self.sessions.attack(self.certed.id_name[client_id], Strike, websocket)
 
     @login_required
     async def view_shop(self, data, client_id, connection_manager, websocket):
