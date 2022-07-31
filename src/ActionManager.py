@@ -343,16 +343,21 @@ class ActionManager:
 
         skill = skills.get(
             data["attack"].casefold(),
+            None,
+        )
+        if skill is None:
             await connection_manager.send_to_client(
                 "Skill doesn't exist", websocket,
-            ),
-        )
+            )
+            return
         if not skill.learnt(player):
             await connection_manager.send_to_client(
                 "Skill not learnt", websocket,
             )
         if skill:
-            self.sessions.attack(self.certed.id_name[client_id], skill, websocket)
+            await connection_manager.send_to_client(
+                self.sessions.attack(self.certed.id_name[client_id], skill, websocket), websocket,
+            )
 
     @login_required
     async def view_shop(self, data, client_id, connection_manager, websocket):

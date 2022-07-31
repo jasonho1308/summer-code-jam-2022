@@ -4,7 +4,6 @@ import random
 class Skill:
     """Template class for skills"""
 
-    name: str
     description: str
     energy_cost: int
     chance: float
@@ -28,9 +27,9 @@ class Skill:
         if random.random() < cls.chance:
             damage = int(user.strength * (random.random() + 1))
             opponent.hp -= damage
-            return f"{user.name!r} uses {cls.name!r} for {damage} damage"
+            return f"{user.name()!r} uses {cls.name()!r} for {damage} damage"
         else:
-            return f"{user.name!r} tried to use {cls.name!r} but missed!"
+            return f"{user.name()!r} tried to use {cls.name()!r} but missed!"
 
     @classmethod
     def use(cls, user, opponent):
