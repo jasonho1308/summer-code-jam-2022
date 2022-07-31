@@ -8,7 +8,6 @@ from ..skills.skill import Skill
 class Monster:
     """Template class for monsters"""
 
-    name: str
     level: int
     hp: int
     max_hp: int

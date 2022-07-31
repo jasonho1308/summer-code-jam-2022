@@ -67,6 +67,16 @@ class Sessions:
         """Check if a user is in a fight"""
         return name in self.fights
 
+    def get_status(self, name):
+        """Get the status of both combatants"""
+        fight = self.fights[name]
+        # TODO: Case for PVP
+        player = fight.player
+        monster = fight.monster
+        output = f"{player.name} - HP:{player.hp}/{player.max_hp} - Energy:{player.energy}/{player.max_energy}"
+        output += f"\n{monster.name} - HP:{monster.hp}/{monster.max_hp} - Energy:{monster.energy}/{monster.max_energy}"
+        return output
+
     def attack(self, player_name, skill, websocket):
         """Run a turn of combat"""
         fight = self.fights[player_name]
@@ -92,6 +102,7 @@ class Sessions:
                             "gold": player.gold,
                         }
                     )
+                    db.commit()
             else:
                 defender: Player = fight.defender
                 offender: Player = fight.offender
@@ -126,6 +137,7 @@ class Sessions:
                             "gold": offender.gold,
                         }
                     )
+                    db.commit()
             self.fights.pop(player_name)
         return result[0]
 
@@ -361,6 +373,23 @@ class ActionManager:
             await connection_manager.send_to_client(
                 self.sessions.attack(self.certed.id_name[client_id], skill, websocket), websocket,
             )
+
+    @login_required
+    async def fight_status(self, data, client_id, connection_manager, websocket):
+        """
+        Check yours and your opponent's status
+
+        JSON Structure:
+        {
+            "action": "fight_status"
+        }
+        """
+        if not self.sessions.is_fighting(self.certed.id_name[client_id]):
+            await connection_manager.send_to_client(
+                "You aren't fighting anything", websocket,
+            )
+            return
+        await connection_manager.send_to_client(self.sessions.get_status(self.certed.id_name[client_id]), websocket)
 
     @login_required
     async def list_skills(self, data, client_id, connection_manager, websocket):
