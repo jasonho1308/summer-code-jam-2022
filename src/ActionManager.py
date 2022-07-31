@@ -102,6 +102,7 @@ class Sessions:
                             "gold": player.gold,
                         }
                     )
+                    db.commit()
             else:
                 defender: Player = fight.defender
                 offender: Player = fight.offender
@@ -136,6 +137,7 @@ class Sessions:
                             "gold": offender.gold,
                         }
                     )
+                    db.commit()
             self.fights.pop(player_name)
         return result[0]
 
