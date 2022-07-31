@@ -1,5 +1,5 @@
 # flake8: noqa
+from . import monsters
 from .monster import Monster, MonsterCatalog
-from .testmonster import TestMonster
 
-all_monsters = [TestMonster]
+all_monsters = [monsters.Goldfish, monsters.Quokka]

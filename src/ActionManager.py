@@ -66,7 +66,9 @@ class Sessions:
 
     def attack(self, player_name, skill, websocket):
         """Run a turn of combat"""
-        result = self.fights[player_name].use_skill(skill)
+        fight = self.fights[player_name]
+        player = fight.player
+        result = fight.use_skill(skill)
 
         if result[1] != 0:
             if len(result) == 2:
@@ -167,7 +169,7 @@ class ActionManager:
                 websocket,
             )
         if bcrypt.checkpw(data["password"].encode("utf-8"), result.encode("utf-8")):
-            self.certed.add(client_id, data["name"].trim("'"), websocket)
+            self.certed.add(client_id, data["name"], websocket)
             await connection_manager.send_to_client(
                 f"Welcome, {data['name']}!", websocket
             )
