@@ -67,9 +67,7 @@ class PVPFight:
         self.offender.is_offender = True
         self.defender = Player(defender)
 
-    def use_skill(
-        self, caster: Player, castee: Player, skill: Skill
-    ) -> tuple[str, int]:
+    def use_skill(self, caster: Player, castee: Player, skill: Skill) -> tuple[str, int]:
         """Called when skill used
 
         str: combat log to send back to user
