@@ -33,11 +33,11 @@ class Skill:
     @classmethod
     def learnt(cls, player):
         return (
-            user.level >= self.level
-            and user.strength >= self.strength
-            and user.intellegence >= self.intelligence
-            and user.stamina >= self.stamina
-            and user.dexterity >= self.dexterity
-            and user.charisma >= self.charisma
-            and user.gold >= self.gold
+            player.level >= cls.level
+            and player.strength >= cls.strength
+            and player.intellegence >= cls.intelligence
+            and player.stamina >= cls.stamina
+            and player.dexterity >= cls.dexterity
+            and player.charisma >= cls.charisma
+            and player.gold >= cls.gold
         )
