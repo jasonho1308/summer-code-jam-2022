@@ -422,7 +422,7 @@ class ActionManager:
         }
         """
         await connection_manager.send_to_client(
-            "\n".join(self.shop.display_shop()), websocket
+            self.shop.display_shop(), websocket
         )
 
     @login_required
