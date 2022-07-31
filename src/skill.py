@@ -19,12 +19,6 @@ class Skill:
 
     def use(self, user, opponent):
         """Decorator for _use, used for checking if skill usable"""
-        if user.hp <= 0 and opponent.hp <= 0:
-            return (user, opponent, "You both are dead, no rewards")
-        if user.hp <= 0:
-            return (user, opponent, f"{user.name} is dead, {opponent.name} wins")
-        elif opponent.hp <= 0:
-            return (user, opponent, f"{opponent.name} is dead, {user.name} wins")
         if user.energy < self.energy_cost:
             return (
                 user,
