@@ -1,5 +1,5 @@
-from json import JSONDecodeError
 import uuid
+from json import JSONDecodeError
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse

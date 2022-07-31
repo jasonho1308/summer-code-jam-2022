@@ -263,7 +263,9 @@ class ActionManager:
                     else:
                         self.sessions.add_pvp_fight(offender, defender)
                         # TODO: make this more descriptive
-                        await connection_manager.send_to_client("Now fighting!", websocket)
+                        await connection_manager.send_to_client(
+                            "Now fighting!", websocket
+                        )
                 else:
                     await connection_manager.send_to_client(
                         "Time reached!",
