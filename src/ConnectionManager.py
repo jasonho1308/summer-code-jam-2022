@@ -65,5 +65,5 @@ class ConnectionManager:
 
     async def broadcast(self, message: str):
         """Sends message to all logined connection"""
-        for connection in self.action_manager.certed.name_ws.keys():
+        for connection in self.action_manager.certed.name_ws.values():
             await connection.send_text(message)
