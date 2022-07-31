@@ -6,7 +6,7 @@ from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 
 from . import database, models
-from .fight import PVEFight
+from .fight import PVEFight, PVPFight
 from .skills.strike import Strike
 
 
@@ -45,13 +45,19 @@ class Certificated:
 class Sessions:
     """Track temporary sessions for users"""
 
-    fights = []
+    fights = {}
 
     def add_pve_fight(self, player):
         """Begin tracking a PVE fight"""
         if self.is_fighting(player.name):
             return
         self.fights[player.name] = PVEFight(player)
+
+    def add_pvp_fight(self, offender, defender):
+        """Begin tracking a PVP fight"""
+        if self.is_fighting(offender.name):
+            return
+        self.fights[offender.name] = PVPFight(offender, defender)
 
     def is_fighting(self, name):
         """Check if a user is in a fight"""
@@ -67,11 +73,12 @@ class Sessions:
         return result[0]
 
 
-class PVPIntermission:
+class RunningPVPs:
     """PVP tracking"""
 
     lobby = []
-    client_id = {}
+    offender_id = {}
+    defender_id = {}
     countdown = {}
 
 
@@ -79,8 +86,9 @@ class ActionManager:
     """Handling actions from client"""
 
     certed = Certificated()
-    pvp_intermission = PVPIntermission()
+    running_pvps = RunningPVPs()
     sessions = Sessions()
+    pvp_sessions = {}
 
     async def login(self, data, client_id, connection_manager, websocket):
         """
@@ -186,6 +194,7 @@ class ActionManager:
                 models.Player.name == self.certed.id_name[client_id]
             )
         ).fetchone()
+        db.close()
         if self.sessions.is_fighting(player.name):
             await connection_manager.send_to_client(
                 "You are already in a fight!", websocket
@@ -233,10 +242,28 @@ class ActionManager:
         lobby = data["lobby"]
         pvp_inter = self.pvp_intermission
         if lobby in pvp_inter.lobby:
-            if client_id == pvp_inter.client_id.pop(lobby):
-                if time.time() <= pvp_inter.countdown.pop(lobby):
-                    # TODO: add a session
-                    ...
+            if client_id == pvp_inter.defender_id[lobby]:
+                if time.time() <= pvp_inter.countdown[lobby]:
+                    db = database.SessionLocal()
+                    offender = db.execute(
+                        models.Player.select().where(
+                            models.Player.name == pvp_inter.offender_id[lobby]
+                        )
+                    ).fetchone()
+                    defender = db.execute(
+                        models.Player.select().where(
+                            models.Player.name == pvp_inter.defender_id[lobby]
+                        )
+                    ).fetchone()
+                    db.close()
+                    if self.sessions.is_fighting(defender.name):
+                        await connection_manager.send_to_client(
+                            "You are already in a fight!", websocket
+                        )
+                    else:
+                        self.sessions.add_pvp_fight(offender, defender)
+                        # TODO: make this more descriptive
+                        await connection_manager.send_to_client("Now fighting!", websocket)
                 else:
                     await connection_manager.send_to_client(
                         "Time reached!",
