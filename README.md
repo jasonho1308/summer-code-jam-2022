@@ -10,7 +10,9 @@ A perfectly normal RPG game!
 - For convenience using the [heroku site](http://summer-code-jam-2022.herokuapp.com/) is encouraged
 
 ## Running
-Run this on your terminal: `uvicorn src.main:app`
+- Run this on your terminal: `uvicorn src.main:app`
+- Go to the site you got from `Uvicorn running on ...`
+- Have fun!
 
 ## Documentation
 Please read the wiki
