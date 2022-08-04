@@ -4,8 +4,10 @@ A perfectly normal RPG game!
 
 ## Setting up
 - Install the dependencies in `requirements.txt`
-- Set up PostgreSQL server
+- [Install PostgreSQL](https://www.postgresql.org/download/)
+- Set up PostgreSQL server [(More info)](https://www.postgresql.org/docs/current/runtime.html)
 - Set an environment variable `DB_URL` with the database URL inside
+- For convenience using the [heroku site](http://summer-code-jam-2022.herokuapp.com/) is encouraged
 
 ## Running
 Run this on your terminal: `uvicorn src.main:app`
