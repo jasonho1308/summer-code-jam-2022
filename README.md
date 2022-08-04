@@ -15,4 +15,4 @@ A perfectly normal RPG game!
 - Have fun!
 
 ## Documentation
-Please read the wiki
+Please read the [wiki](https://github.com/jasonho1308/summer-code-jam-2022/wiki)
